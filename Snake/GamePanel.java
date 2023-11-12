@@ -57,13 +57,13 @@ public class GamePanel extends JPanel implements ActionListener {
     public void initializeGame() {
 
         // Réinitialise les variables d'état
-        bodyParts = 6;
+        bodyParts = 5;
         applesEaten = 0;
         direction = 'R';
         // Réinitialise la position du serpent
         for (int i = 0; i < bodyParts; i++) {
-            x[i] = 50 - i * UNIT_SIZE;
-            y[i] = 50;
+            x[i] = UNIT_SIZE * 3 - i * UNIT_SIZE; // Assure-toi que cela commence dans une case
+            y[i] = UNIT_SIZE * 3; // Cette valeur doit également être un multiple de UNIT_SIZE
         }
         newApple();
         running = true;
@@ -135,11 +135,21 @@ public class GamePanel extends JPanel implements ActionListener {
     }
 
     public void gameOver(Graphics g) {
+        // Affichage de "Game Over"
         g.setColor(Color.RED);
-        g.setFont(new Font("Arial", Font.BOLD, 75));
-        FontMetrics metrics = getFontMetrics(g.getFont());
-        g.drawString("Game Over", (SCREEN_WIDTH - metrics.stringWidth("Game Over")) / 2, SCREEN_HEIGHT / 2);
+        g.setFont(new Font("Arial", Font.BOLD, 40));
+        FontMetrics metrics1 = getFontMetrics(g.getFont());
+        String gameOverText = "Game Over";
+        g.drawString(gameOverText, (SCREEN_WIDTH - metrics1.stringWidth(gameOverText)) / 2, SCREEN_HEIGHT / 2);
+    
+        // Affichage du score
+        g.setColor(Color.WHITE);
+        g.setFont(new Font("Arial", Font.BOLD, 30));
+        FontMetrics metrics2 = getFontMetrics(g.getFont());
+        String scoreText = "Score: " + applesEaten;
+        g.drawString(scoreText, (SCREEN_WIDTH - metrics2.stringWidth(scoreText)) / 2, SCREEN_HEIGHT / 2 + metrics1.getHeight());
     }
+    
 
     @Override
     public void actionPerformed(ActionEvent e) {
