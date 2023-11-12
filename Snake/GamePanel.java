@@ -7,6 +7,7 @@ import java.util.Random;
 
 public class GamePanel extends JPanel implements ActionListener {
     private GameFrame gameFrame; // Ajoute une référence à GameFrame
+    private Scoreboard scoreboard = new Scoreboard();
 
     public static final int SCREEN_WIDTH = 600;
     public static final int SCREEN_HEIGHT = 600;
@@ -135,20 +136,39 @@ public class GamePanel extends JPanel implements ActionListener {
     }
 
     public void gameOver(Graphics g) {
-        // Affichage de "Game Over"
+        // Ajout du score au tableau
+        scoreboard.addScore(applesEaten);
+    
+        // Affichage de "Game Over" en plus gros et plus haut
         g.setColor(Color.RED);
-        g.setFont(new Font("Arial", Font.BOLD, 40));
+        g.setFont(new Font("Arial", Font.BOLD, 100));
         FontMetrics metrics1 = getFontMetrics(g.getFont());
         String gameOverText = "Game Over";
-        g.drawString(gameOverText, (SCREEN_WIDTH - metrics1.stringWidth(gameOverText)) / 2, SCREEN_HEIGHT / 2);
+        g.drawString(gameOverText, (SCREEN_WIDTH - metrics1.stringWidth(gameOverText)) / 2, SCREEN_HEIGHT / 4); // Position plus haute
     
-        // Affichage du score
+        // Position de départ pour le tableau des scores
+        int y = SCREEN_HEIGHT / 2; 
+    
+        // Affichage du tableau des scores
+        g.setColor(Color.WHITE);
+        g.setFont(new Font("Arial", Font.BOLD, 40));
+        for (int score : scoreboard.getHighScores()) {
+            g.drawString("Score: " + score, (SCREEN_WIDTH - g.getFontMetrics().stringWidth("Score: " + score)) / 2, y);
+            y += g.getFontMetrics().getHeight();
+        }
+    
+        // Espace entre le tableau des scores et le score du joueur
+        y += g.getFontMetrics().getHeight(); // Double saut de ligne
+    
+        // Affichage du score actuel du joueur
         g.setColor(Color.WHITE);
         g.setFont(new Font("Arial", Font.BOLD, 30));
         FontMetrics metrics2 = getFontMetrics(g.getFont());
-        String scoreText = "Score: " + applesEaten;
-        g.drawString(scoreText, (SCREEN_WIDTH - metrics2.stringWidth(scoreText)) / 2, SCREEN_HEIGHT / 2 + metrics1.getHeight());
+        String scoreText = "Votre Score: " + applesEaten;
+        g.drawString(scoreText, (SCREEN_WIDTH - metrics2.stringWidth(scoreText)) / 2, y);
     }
+    
+    
     
 
     @Override
