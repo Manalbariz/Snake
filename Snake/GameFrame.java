@@ -25,6 +25,7 @@ public class GameFrame extends JFrame {
 
     public void startGame() {
         this.setContentPane(gamePanel); // Utilise l'instance de GamePanel stockée
+        gamePanel.startGame();
         gamePanel.requestFocusInWindow();
         this.revalidate();
     }

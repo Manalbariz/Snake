@@ -43,7 +43,6 @@ public class GamePanel extends JPanel implements ActionListener {
         this.setBackground(Color.black); // add a pic later
         this.setFocusable(true);
         this.addKeyListener(new MyKeyAdapter());
-        startGame();
     }
 
     public void startGame() {
