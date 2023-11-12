@@ -2,18 +2,30 @@ package Snake;
 
 import javax.swing.JFrame;
 
-public class GameFrame extends JFrame{
-    GameFrame(){
+public class GameFrame extends JFrame {
+    private StartMenu startMenu;
+    private GamePanel gamePanel;
 
-        GamePanel panel = new GamePanel();
+    GameFrame() {
+        startMenu = new StartMenu(this);
+        gamePanel = new GamePanel();
 
-        this.add(panel);
         this.setTitle("Snake");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
+        this.setLocationRelativeTo(null);
+    }
+
+    public void showStartMenu() {
+        this.setContentPane(startMenu);
+        startMenu.requestFocusInWindow();
         this.pack();
         this.setVisible(true);
-        this.setLocationRelativeTo(null);
+    }
 
+    public void startGame() {
+        this.setContentPane(gamePanel); // Utilise l'instance de GamePanel stockée
+        gamePanel.requestFocusInWindow();
+        this.revalidate();
     }
 }
