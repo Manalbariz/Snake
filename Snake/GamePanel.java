@@ -21,8 +21,8 @@ public class GamePanel extends JPanel implements ActionListener {
     //
 
     // The nmbr of snake part in the beginning
-    public int bodyParts = 5;
-    public int applesEaten = 0;
+    public int bodyParts;
+    public int applesEaten;
     //
 
     // position of apples
@@ -31,10 +31,10 @@ public class GamePanel extends JPanel implements ActionListener {
     //
 
     // Snake direction
-    char direction = 'R'; // beging by going right
+    char direction; // beging by going right
     //
 
-    public boolean running = false;
+    public boolean running;
     public Timer timer;
     public Random random;
 
@@ -53,6 +53,23 @@ public class GamePanel extends JPanel implements ActionListener {
         timer = new Timer(DELAY, this); // we use "this" because we are using the ActionListener interface
         timer.start();
     }
+
+    public void initializeGame() {
+
+        // Réinitialise les variables d'état
+        bodyParts = 6;
+        applesEaten = 0;
+        direction = 'R';
+        // Réinitialise la position du serpent
+        for (int i = 0; i < bodyParts; i++) {
+            x[i] = 50 - i * UNIT_SIZE;
+            y[i] = 50;
+        }
+        newApple();
+        running = true;
+    }
+    
+    
 
     public void paintComponent(Graphics graph) {
         super.paintComponent(graph);
