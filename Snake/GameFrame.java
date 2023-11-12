@@ -8,7 +8,7 @@ public class GameFrame extends JFrame {
 
     GameFrame() {
         startMenu = new StartMenu(this);
-        gamePanel = new GamePanel();
+        gamePanel = new GamePanel(this);
 
         this.setTitle("Snake");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -28,5 +28,9 @@ public class GameFrame extends JFrame {
         gamePanel.startGame();
         gamePanel.requestFocusInWindow();
         this.revalidate();
+    }
+
+    public void returnToMenu() {
+        showStartMenu();
     }
 }

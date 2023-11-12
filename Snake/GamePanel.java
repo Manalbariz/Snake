@@ -6,6 +6,7 @@ import javax.swing.*;
 import java.util.Random;
 
 public class GamePanel extends JPanel implements ActionListener {
+    private GameFrame gameFrame; // Ajoute une référence à GameFrame
 
     public static final int SCREEN_WIDTH = 600;
     public static final int SCREEN_HEIGHT = 600;
@@ -37,7 +38,8 @@ public class GamePanel extends JPanel implements ActionListener {
     public Timer timer;
     public Random random;
 
-    GamePanel() {
+    GamePanel(GameFrame gameFrame) {
+        this.gameFrame = gameFrame; // Initialise la référence à GameFrame
         random = new Random();
         this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT)); // modif size game panel
         this.setBackground(Color.black); // add a pic later
@@ -54,7 +56,11 @@ public class GamePanel extends JPanel implements ActionListener {
 
     public void paintComponent(Graphics graph) {
         super.paintComponent(graph);
-        Drawer.draw(graph, SCREEN_WIDTH, SCREEN_HEIGHT, UNIT_SIZE, appleX, appleY, x, y, bodyParts);
+        if (running) {
+            Drawer.draw(graph, SCREEN_WIDTH, SCREEN_HEIGHT, UNIT_SIZE, appleX, appleY, x, y, bodyParts);
+        } else {
+            gameOver(graph);
+        }
     }
 
     public void newApple() { // add an apple
@@ -112,7 +118,10 @@ public class GamePanel extends JPanel implements ActionListener {
     }
 
     public void gameOver(Graphics g) {
-
+        g.setColor(Color.RED);
+        g.setFont(new Font("Arial", Font.BOLD, 75));
+        FontMetrics metrics = getFontMetrics(g.getFont());
+        g.drawString("Game Over", (SCREEN_WIDTH - metrics.stringWidth("Game Over")) / 2, SCREEN_HEIGHT / 2);
     }
 
     @Override
@@ -151,6 +160,9 @@ public class GamePanel extends JPanel implements ActionListener {
                     break;
                 default:
                     break;
+            }
+            if (!running && e.getKeyCode() == KeyEvent.VK_ENTER) {
+                gameFrame.returnToMenu(); // Appelle la méthode de GameFrame pour retourner au menu
             }
         }
 
