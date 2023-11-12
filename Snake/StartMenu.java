@@ -15,23 +15,40 @@ public class StartMenu extends JPanel implements KeyListener {
 
     public StartMenu(GameFrame gameFrame) {
         this.gameFrame = gameFrame;
-        setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT)); // Utilise les constantes définies
+        setBackground(Color.BLACK);
+        setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
         setFocusable(true);
         addKeyListener(this);
     }
 
     @Override
-    public void paintComponent(Graphics g) {
+    protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        // Dessiner le menu ici
+
+        // Définir la taille et le style de la police
+        Font menuFont = new Font("Arial", Font.BOLD, 40);
+        g.setFont(menuFont);
+
+        // Obtenir les métriques de la police pour centrer le texte
+        FontMetrics metrics = g.getFontMetrics(menuFont);
+        int height = metrics.getHeight();
+
+        // Dessiner les options du menu
         for (int i = 0; i < options.length; i++) {
+            String option = options[i];
+            int width = metrics.stringWidth(option);
+
             if (i == currentSelection) {
-                g.setColor(Color.RED);
+                g.setColor(Color.GREEN);
             } else {
                 g.setColor(Color.WHITE);
             }
-            // Dessiner chaque option
-            g.drawString(options[i], 50, 50 + i * 30); // Position à ajuster
+
+            // Calculer la position x pour centrer le texte
+            int x = (SCREEN_WIDTH - width) / 2;
+            int y = (SCREEN_HEIGHT - height * options.length) / 2 + height * i;
+
+            g.drawString(option, x, y);
         }
     }
 
