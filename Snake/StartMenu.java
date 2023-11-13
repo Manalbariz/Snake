@@ -59,8 +59,7 @@ public class StartMenu extends JPanel implements KeyListener {
 
         // Dessiner les options du menu
         g.setColor(new Color(133,4,4));
-        g.drawString("Shh-NAKE", 450, 100);
-
+        g.drawString("Ssss-NAKE", 450, 100);
 
 
         for (int i = 0; i < options.length; i++) {
@@ -69,7 +68,7 @@ public class StartMenu extends JPanel implements KeyListener {
             int width = metrics.stringWidth(option);
 
             if (i == currentSelection) {
-                g.setColor(new Color(184,245,21));
+                g.setColor(new Color(19,124,5));
             } else {
                 g.setColor(Color.BLACK);
             }
