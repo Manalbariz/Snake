@@ -9,7 +9,7 @@ public class Drawer {
     public static void draw(Graphics graph, int SCREEN_WIDTH, int SCREEN_HEIGHT, int UNIT_SIZE, int appleX, int appleY,
             int[] x, int[] y, int bodyParts) {
         // turn into grid
-        for (int i = 0; i < SCREEN_HEIGHT / UNIT_SIZE; i++) {
+        for (int i = 0; i < SCREEN_HEIGHT*2 / UNIT_SIZE; i++) {
             graph.drawLine(i * UNIT_SIZE, 0, i * UNIT_SIZE, SCREEN_HEIGHT);
             graph.drawLine(0, i * UNIT_SIZE, SCREEN_WIDTH, i * UNIT_SIZE);
         }

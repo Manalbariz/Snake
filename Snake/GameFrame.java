@@ -12,14 +12,17 @@ public class GameFrame extends JFrame {
 
         this.setTitle("Snake");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.add(gamePanel);
         this.setResizable(false);
+        this.pack();
+
         this.setLocationRelativeTo(null);
     }
 
     public void showStartMenu() {
         this.setContentPane(startMenu);
         startMenu.requestFocusInWindow();
-        this.pack();
+
         this.setVisible(true);
     }
 
