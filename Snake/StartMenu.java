@@ -7,18 +7,22 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
+import javax.sound.sampled.*;
 
 public class StartMenu extends JPanel implements KeyListener {
     private GameFrame gameFrame; // Référence à GameFrame
     private int currentSelection = 0; // 0 pour "Jouer", 1 pour "Quitter"
-    private String[] options = {"Jouer", "Score", "Quitter" };
+    private String[] options = { "Jouer", "Score", "Quitter" };
 
     public static final int SCREEN_WIDTH = 1200;
     public static final int SCREEN_HEIGHT = 700;
 
     private Image background;
     private Font menuFont;
-    public StartMenu(GameFrame gameFrame) {
+    private Clip clip;
+    private AudioInputStream audioStream;
+
+    public StartMenu(GameFrame gameFrame)throws UnsupportedAudioFileException, IOException, LineUnavailableException {
         this.gameFrame = gameFrame;
         // read img
         try {
@@ -28,20 +32,31 @@ public class StartMenu extends JPanel implements KeyListener {
             e.printStackTrace();
         }
         setLayout(new BorderLayout());
+
+        // add sound
+        audioStream = AudioSystem.getAudioInputStream(new File("C:\\Users\\bariz\\OneDrive\\Bureau\\Nouveau dossier (3)\\T-JAV-501-MPL_5\\Snake\\ressources\\risk-136788.wav").getAbsoluteFile());
+        clip = AudioSystem.getClip();
+        
+        clip.open(audioStream);
+
+        clip.loop(Clip.LOOP_CONTINUOUSLY);
+
         setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
         setFocusable(true);
         addKeyListener(this);
 
-        //charger font
-        try{
-        Font jimFont = Font.createFont(Font.TRUETYPE_FONT, new File("C:\\Users\\bariz\\OneDrive\\Bureau\\Nouveau dossier (3)\\T-JAV-501-MPL_5\\Snake\\ressources\\JimNightshade-Regular.ttf"));
-        jimFont = jimFont.deriveFont(80f);
-        menuFont = jimFont;
+        // charger font
+        try {
+            Font jimFont = Font.createFont(Font.TRUETYPE_FONT, new File(
+                    "C:\\Users\\bariz\\OneDrive\\Bureau\\Nouveau dossier (3)\\T-JAV-501-MPL_5\\Snake\\ressources\\JimNightshade-Regular.ttf"));
+            jimFont = jimFont.deriveFont(80f);
+            menuFont = jimFont;
 
-        }catch (IOException | FontFormatException e){
+        } catch (IOException | FontFormatException e) {
             e.printStackTrace();
         }
     }
+
 
     @Override
     protected void paintComponent(Graphics g) {
@@ -58,9 +73,8 @@ public class StartMenu extends JPanel implements KeyListener {
         int height = metrics.getHeight();
 
         // Dessiner les options du menu
-        g.setColor(new Color(133,4,4));
+        g.setColor(new Color(133, 4, 4));
         g.drawString("Ssss-NAKE", 450, 100);
-
 
         for (int i = 0; i < options.length; i++) {
             String option = options[i];
@@ -68,17 +82,17 @@ public class StartMenu extends JPanel implements KeyListener {
             int width = metrics.stringWidth(option);
 
             if (i == currentSelection) {
-                g.setColor(new Color(19,124,5));
+                g.setColor(new Color(19, 124, 5));
             } else {
                 g.setColor(Color.BLACK);
             }
 
             // Calculer la position x pour centrer le texte
             int x = (SCREEN_WIDTH - width) / 2;
-            int y = ((SCREEN_HEIGHT - height * options.length) / 2 + height * i)+100;
+            int y = ((SCREEN_HEIGHT - height * options.length) / 2 + height * i) + 100;
 
             g.drawString(option, x, y);
-        
+
         }
     }
 
@@ -96,8 +110,10 @@ public class StartMenu extends JPanel implements KeyListener {
         } else if (key == KeyEvent.VK_ENTER) {
             if (currentSelection == 0) {
                 gameFrame.startGame();
+                clip.stop();
             } else if (currentSelection == 1) {
                 System.exit(0);
+                clip.stop();
             }
         }
         repaint();

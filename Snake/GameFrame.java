@@ -1,12 +1,16 @@
 package Snake;
 
+import java.io.IOException;
+
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JFrame;
 
 public class GameFrame extends JFrame {
     private StartMenu startMenu;
     private GamePanel gamePanel;
 
-    GameFrame() {
+    GameFrame() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
         startMenu = new StartMenu(this);
         gamePanel = new GamePanel(this);
 
