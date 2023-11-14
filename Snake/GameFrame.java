@@ -3,12 +3,14 @@ package Snake;
 import javax.swing.JFrame;
 
 public class GameFrame extends JFrame {
+    private Scoreboard scoreboard;
     private StartMenu startMenu;
     private GamePanel gamePanel;
 
     GameFrame() {
-        startMenu = new StartMenu(this);
-        gamePanel = new GamePanel(this);
+        scoreboard = new Scoreboard(); // Initialisation de Scoreboard
+        startMenu = new StartMenu(this, scoreboard);
+        gamePanel = new GamePanel(this, scoreboard);
 
         this.setTitle("Snake");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -33,5 +35,9 @@ public class GameFrame extends JFrame {
 
     public void returnToMenu() {
         showStartMenu();
+    }
+
+    public void updateHighScores(int score) {
+        scoreboard.addScore(score);
     }
 }

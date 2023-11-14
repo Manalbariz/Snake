@@ -7,7 +7,7 @@ import java.util.Random;
 
 public class GamePanel extends JPanel implements ActionListener {
     private GameFrame gameFrame; // Ajoute une référence à GameFrame
-    private Scoreboard scoreboard = new Scoreboard();
+    private Scoreboard scoreboard;
 
     public static final int SCREEN_WIDTH = 600;
     public static final int SCREEN_HEIGHT = 600;
@@ -39,8 +39,9 @@ public class GamePanel extends JPanel implements ActionListener {
     public Timer timer;
     public Random random;
 
-    GamePanel(GameFrame gameFrame) {
+    GamePanel(GameFrame gameFrame, Scoreboard scoreboard) {
         this.gameFrame = gameFrame; // Initialise la référence à GameFrame
+        this.scoreboard = scoreboard;
         random = new Random();
         this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT)); // modif size game panel
         this.setBackground(Color.black); // add a pic later
