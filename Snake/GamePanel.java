@@ -2,7 +2,18 @@ package Snake;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
+import javax.swing.text.StyledEditorKit.BoldAction;
+
 import java.util.Random;
 
 public class GamePanel extends JPanel implements ActionListener {
@@ -11,10 +22,16 @@ public class GamePanel extends JPanel implements ActionListener {
 
     public static final int SCREEN_WIDTH = 1200;
     public static final int SCREEN_HEIGHT = 700;
-    public static final int UNIT_SIZE = 20; // Apples
+    public static final int UNIT_SIZE = 30; // Apples
     public static final int GAME_UNITS = (SCREEN_WIDTH * SCREEN_HEIGHT) / UNIT_SIZE; // Numbr of apples in the screen
     public static final int DELAY = 75; // miniteur : délai plus élevé = jeu plus lent
 
+    private Clip clip;
+    private AudioInputStream audioStream;
+    private Clip clip2;
+    private AudioInputStream audioStream2;
+    private Clip clip3;
+    private AudioInputStream audioStream3;
     // the body of the snake
     public final int x[] = new int[GAME_UNITS]; // the size is GAME_UNITS because the snake can't be bigger than the
                                                 // nmbr of units
@@ -32,23 +49,46 @@ public class GamePanel extends JPanel implements ActionListener {
     //
 
     // Snake direction
-    char direction; // beging by going right
+    static char direction; // beging by going right
     //
 
     public boolean running;
     public Timer timer;
     public Random random;
 
-    GamePanel(GameFrame gameFrame) {
+    // private Image backgroundGame;
+
+    GamePanel(GameFrame gameFrame) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
         this.gameFrame = gameFrame; // Initialise la référence à GameFrame
+        // // read img
+        // try {
+        // backgroundGame = ImageIO.read(new File(
+        // "C:\\Users\\bariz\\OneDrive\\Bureau\\Nouveau dossier
+        // (3)\\T-JAV-501-MPL_5\\Snake\\ressources\\Game3.jpg"));
+        // } catch (IOException e) {
+        // e.printStackTrace();
+        // }
         random = new Random();
         this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT)); // modif size game panel
-        this.setBackground(Color.black); // add a pic later
+        this.setBackground(Color.black);
         this.setFocusable(true);
         this.addKeyListener(new MyKeyAdapter());
+
+        // add sound 1
+        audioStream = AudioSystem.getAudioInputStream(new File(
+                "C:\\Users\\bariz\\OneDrive\\Bureau\\Nouveau dossier (3)\\T-JAV-501-MPL_5\\Snake\\ressources\\punch.wav")
+                .getAbsoluteFile());
+        clip = AudioSystem.getClip();
+        // add sound 2
+        audioStream2 = AudioSystem.getAudioInputStream(new File(
+                "C:\\Users\\bariz\\OneDrive\\Bureau\\Nouveau dossier (3)\\T-JAV-501-MPL_5\\Snake\\ressources\\eat.wav")
+                .getAbsoluteFile());
+        clip2 = AudioSystem.getClip();
+
     }
 
     public void startGame() {
+
         newApple(); // create a new apple on screen
         running = true;
         timer = new Timer(DELAY, this); // we use "this" because we are using the ActionListener interface
@@ -69,11 +109,14 @@ public class GamePanel extends JPanel implements ActionListener {
         newApple();
         running = true;
     }
-    
-    
 
     public void paintComponent(Graphics graph) {
+
         super.paintComponent(graph);
+        // // draw img
+        // Image scaledBackgroundGame = backgroundGame.getScaledInstance(SCREEN_WIDTH,
+        // SCREEN_HEIGHT, Image.SCALE_DEFAULT);
+        // graph.drawImage(scaledBackgroundGame, 0, 0, null);
         if (running) {
             Drawer.draw(graph, SCREEN_WIDTH, SCREEN_HEIGHT, UNIT_SIZE, appleX, appleY, x, y, bodyParts);
         } else {
@@ -82,17 +125,35 @@ public class GamePanel extends JPanel implements ActionListener {
     }
 
     public void newApple() { // add an apple
+
         // generate a random apple in one of the case (on grid)
-        appleX = random.nextInt(1,(int) (SCREEN_WIDTH / UNIT_SIZE)-1) * UNIT_SIZE;
-        appleY = random.nextInt(1,(int) (SCREEN_HEIGHT / UNIT_SIZE)-1) * UNIT_SIZE;
+        appleX = random.nextInt(1, (int) (SCREEN_WIDTH / UNIT_SIZE) - 1) * UNIT_SIZE;
+        appleY = random.nextInt(1, (int) (SCREEN_HEIGHT / UNIT_SIZE) - 1) * UNIT_SIZE;
         //
     }
 
     public void checkApple() {
-        if((x[0] == appleX)&&(y[0] == appleY) ){
+        if ((x[0] == appleX) && (y[0] == appleY)) {
+            if (!clip2.isRunning()) {
+                try {
+                    audioStream2 = AudioSystem.getAudioInputStream(new File(
+                            "C:\\Users\\bariz\\OneDrive\\Bureau\\Nouveau dossier (3)\\T-JAV-501-MPL_5\\Snake\\ressources\\eat.wav")
+                            .getAbsoluteFile());
+                    clip2 = AudioSystem.getClip();
+                    clip2.open(audioStream2);
+                    clip2.loop(0);
+                } catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
+                    e.printStackTrace();
+                }
+            }
+
             bodyParts++;
             applesEaten++;
+            if (clip2.isRunning()) {
+                clip2.stop();
+            }
             newApple();
+
         }
     }
 
@@ -100,28 +161,86 @@ public class GamePanel extends JPanel implements ActionListener {
         // check if head collides with body
         for (int i = bodyParts; i > 0; i--) {
             if ((x[0] == x[i]) && (y[0] == y[i])) {
+
+                try {
+                    clip.open(audioStream);
+                    clip.loop(0);
+
+                } catch (LineUnavailableException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+
                 running = false;
+
             }
         }
         //
         // check if head collides with borders
         // check if head collides with left border
         if (x[0] <= 0) {
+            try {
+                clip.open(audioStream);
+                clip.loop(0);
+            } catch (LineUnavailableException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
             running = false;
+
         }
         //
         // check if head collides with right border
-        if (x[0] > SCREEN_WIDTH - UNIT_SIZE) { // add UNIT_SIZE*2 to keep the head of the snake on screen  (SCREEN_WIDTH - UNIT_SIZE * 3)
+        if (x[0] > SCREEN_WIDTH - UNIT_SIZE) { // add UNIT_SIZE*2 to keep the head of the snake on screen (SCREEN_WIDTH
+            try {
+                clip.open(audioStream);
+                clip.loop(0);
+
+            } catch (LineUnavailableException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } // - UNIT_SIZE * 3)
             running = false;
         }
         //
         // check if head collides with up border
         if (y[0] < 0) {
+            try {
+                clip.open(audioStream);
+                clip.loop(0);
+
+            } catch (LineUnavailableException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
             running = false;
         }
         //
         // check if head collides with down border
-        if (y[0] > SCREEN_HEIGHT - UNIT_SIZE) {    //(SCREEN_HEIGHT - UNIT_SIZE * 3)
+        if (y[0] > SCREEN_HEIGHT - UNIT_SIZE) { // (SCREEN_HEIGHT - UNIT_SIZE * 3)
+            try {
+                clip.open(audioStream);
+                clip.loop(0);
+
+            } catch (LineUnavailableException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
             running = false;
         }
         //
@@ -136,19 +255,33 @@ public class GamePanel extends JPanel implements ActionListener {
     }
 
     public void gameOver(Graphics g) {
+        // add sound
+        try {
+            audioStream3 = AudioSystem.getAudioInputStream(new File(
+                    "C:\\Users\\bariz\\OneDrive\\Bureau\\Nouveau dossier (3)\\T-JAV-501-MPL_5\\Snake\\ressources\\failure.wav")
+                    .getAbsoluteFile());
+            clip3 = AudioSystem.getClip();
+            clip3.open(audioStream3);
+            clip3.loop(0);
+        } catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
+            e.printStackTrace();
+        }
+
         // Ajout du score au tableau
         scoreboard.addScore(applesEaten);
-    
+
         // Affichage de "Game Over" en plus gros et plus haut
         g.setColor(Color.RED);
         g.setFont(new Font("Arial", Font.BOLD, 100));
         FontMetrics metrics1 = getFontMetrics(g.getFont());
         String gameOverText = "Game Over";
-        g.drawString(gameOverText, (SCREEN_WIDTH - metrics1.stringWidth(gameOverText)) / 2, SCREEN_HEIGHT / 4); // Position plus haute
-    
+        g.drawString(gameOverText, (SCREEN_WIDTH - metrics1.stringWidth(gameOverText)) / 2, SCREEN_HEIGHT / 4); // Position
+                                                                                                                // plus
+                                                                                                                // haute
+
         // Position de départ pour le tableau des scores
-        int y = SCREEN_HEIGHT / 2; 
-    
+        int y = SCREEN_HEIGHT / 2;
+
         // Affichage du tableau des scores
         g.setColor(Color.WHITE);
         g.setFont(new Font("Arial", Font.BOLD, 40));
@@ -156,10 +289,10 @@ public class GamePanel extends JPanel implements ActionListener {
             g.drawString("Score: " + score, (SCREEN_WIDTH - g.getFontMetrics().stringWidth("Score: " + score)) / 2, y);
             y += g.getFontMetrics().getHeight();
         }
-    
+
         // Espace entre le tableau des scores et le score du joueur
         y += g.getFontMetrics().getHeight(); // Double saut de ligne
-    
+
         // Affichage du score actuel du joueur
         g.setColor(Color.WHITE);
         g.setFont(new Font("Arial", Font.BOLD, 30));
@@ -167,9 +300,6 @@ public class GamePanel extends JPanel implements ActionListener {
         String scoreText = "Votre Score: " + applesEaten;
         g.drawString(scoreText, (SCREEN_WIDTH - metrics2.stringWidth(scoreText)) / 2, y);
     }
-    
-    
-    
 
     @Override
     public void actionPerformed(ActionEvent e) {
