@@ -18,7 +18,7 @@ import java.util.Random;
 
 public class GamePanel extends JPanel implements ActionListener {
     private GameFrame gameFrame; // Ajoute une référence à GameFrame
-    private Scoreboard scoreboard = new Scoreboard();
+    private Scoreboard scoreboard;
 
     public static final int SCREEN_WIDTH = 1200;
     public static final int SCREEN_HEIGHT = 700;
@@ -56,10 +56,12 @@ public class GamePanel extends JPanel implements ActionListener {
     public Timer timer;
     public Random random;
 
+
     // private Image backgroundGame;
 
-    GamePanel(GameFrame gameFrame) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
+    GamePanel(GameFrame gameFrame, Scoreboard scoreboard) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
         this.gameFrame = gameFrame; // Initialise la référence à GameFrame
+        this.scoreboard = scoreboard;
         // // read img
         // try {
         // backgroundGame = ImageIO.read(new File(
@@ -68,6 +70,7 @@ public class GamePanel extends JPanel implements ActionListener {
         // } catch (IOException e) {
         // e.printStackTrace();
         // }
+
         random = new Random();
         this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT)); // modif size game panel
         this.setBackground(Color.black);
@@ -275,12 +278,14 @@ public class GamePanel extends JPanel implements ActionListener {
         g.setFont(new Font("Arial", Font.BOLD, 100));
         FontMetrics metrics1 = getFontMetrics(g.getFont());
         String gameOverText = "Game Over";
+
         g.drawString(gameOverText, (SCREEN_WIDTH - metrics1.stringWidth(gameOverText)) / 2, SCREEN_HEIGHT / 4); // Position
                                                                                                                 // plus
                                                                                                                 // haute
 
         // Position de départ pour le tableau des scores
         int y = SCREEN_HEIGHT / 2;
+        int yStart = scoreboard.afficherScores(g, SCREEN_WIDTH, y);
 
         // Affichage du tableau des scores
         g.setColor(Color.WHITE);
@@ -296,9 +301,8 @@ public class GamePanel extends JPanel implements ActionListener {
         // Affichage du score actuel du joueur
         g.setColor(Color.WHITE);
         g.setFont(new Font("Arial", Font.BOLD, 30));
-        FontMetrics metrics2 = getFontMetrics(g.getFont());
         String scoreText = "Votre Score: " + applesEaten;
-        g.drawString(scoreText, (SCREEN_WIDTH - metrics2.stringWidth(scoreText)) / 2, y);
+        g.drawString(scoreText, (SCREEN_WIDTH - g.getFontMetrics().stringWidth(scoreText)) / 2, y);
     }
 
     @Override
