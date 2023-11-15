@@ -7,7 +7,7 @@ import java.util.Random;
 
 public class GamePanel extends JPanel implements ActionListener {
     private GameFrame gameFrame; // Ajoute une référence à GameFrame
-    private Scoreboard scoreboard = new Scoreboard();
+    private Scoreboard scoreboard;
 
     public static final int SCREEN_WIDTH = 1200;
     public static final int SCREEN_HEIGHT = 700;
@@ -39,8 +39,9 @@ public class GamePanel extends JPanel implements ActionListener {
     public Timer timer;
     public Random random;
 
-    GamePanel(GameFrame gameFrame) {
+    GamePanel(GameFrame gameFrame, Scoreboard scoreboard) {
         this.gameFrame = gameFrame; // Initialise la référence à GameFrame
+        this.scoreboard = scoreboard;
         random = new Random();
         this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT)); // modif size game panel
         this.setBackground(Color.black); // add a pic later
@@ -144,32 +145,21 @@ public class GamePanel extends JPanel implements ActionListener {
         g.setFont(new Font("Arial", Font.BOLD, 100));
         FontMetrics metrics1 = getFontMetrics(g.getFont());
         String gameOverText = "Game Over";
-        g.drawString(gameOverText, (SCREEN_WIDTH - metrics1.stringWidth(gameOverText)) / 2, SCREEN_HEIGHT / 4); // Position plus haute
+        g.drawString(gameOverText, (SCREEN_WIDTH - metrics1.stringWidth(gameOverText)) / 2, SCREEN_HEIGHT / 4);
     
-        // Position de départ pour le tableau des scores
-        int y = SCREEN_HEIGHT / 2; 
+        // Appel de la méthode afficherScores pour dessiner le tableau des scores
+        int yStart = SCREEN_HEIGHT / 2; 
+        int y = scoreboard.afficherScores(g, SCREEN_WIDTH, yStart);
     
-        // Affichage du tableau des scores
-        g.setColor(Color.WHITE);
-        g.setFont(new Font("Arial", Font.BOLD, 40));
-        for (int score : scoreboard.getHighScores()) {
-            g.drawString("Score: " + score, (SCREEN_WIDTH - g.getFontMetrics().stringWidth("Score: " + score)) / 2, y);
-            y += g.getFontMetrics().getHeight();
-        }
-    
-        // Espace entre le tableau des scores et le score du joueur
-        y += g.getFontMetrics().getHeight(); // Double saut de ligne
+        // Espace supplémentaire entre le tableau des scores et le score du joueur
+        y += g.getFontMetrics().getHeight(); // Ajustement pour plus d'espace
     
         // Affichage du score actuel du joueur
         g.setColor(Color.WHITE);
         g.setFont(new Font("Arial", Font.BOLD, 30));
-        FontMetrics metrics2 = getFontMetrics(g.getFont());
         String scoreText = "Votre Score: " + applesEaten;
-        g.drawString(scoreText, (SCREEN_WIDTH - metrics2.stringWidth(scoreText)) / 2, y);
+        g.drawString(scoreText, (SCREEN_WIDTH - g.getFontMetrics().stringWidth(scoreText)) / 2, y);
     }
-    
-    
-    
 
     @Override
     public void actionPerformed(ActionEvent e) {

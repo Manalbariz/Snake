@@ -11,7 +11,10 @@ import javax.sound.sampled.*;
 
 public class StartMenu extends JPanel implements KeyListener {
     private GameFrame gameFrame; // Référence à GameFrame
+    private Scoreboard scoreboard;
+    private boolean afficherLesScores = false;
     private int currentSelection = 0; // 0 pour "Jouer", 1 pour "Quitter"
+
     private String[] options = { "Jouer", "Score", "Quitter" };
 
     public static final int SCREEN_WIDTH = 1200;
@@ -24,6 +27,7 @@ public class StartMenu extends JPanel implements KeyListener {
 
     public StartMenu(GameFrame gameFrame)throws UnsupportedAudioFileException, IOException, LineUnavailableException {
         this.gameFrame = gameFrame;
+        this.scoreboard = scoreboard;
         // read img
         try {
             background = ImageIO.read(new File(
@@ -62,39 +66,50 @@ public class StartMenu extends JPanel implements KeyListener {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        // draw img
-        Image scaledBackground = background.getScaledInstance(SCREEN_WIDTH, SCREEN_HEIGHT, Image.SCALE_DEFAULT);
-        g.drawImage(scaledBackground, 0, 0, null);
+        if (!afficherLesScores) {
+          // draw img
+          Image scaledBackground = background.getScaledInstance(SCREEN_WIDTH, SCREEN_HEIGHT, Image.SCALE_DEFAULT);
+          g.drawImage(scaledBackground, 0, 0, null);
 
-        // Définir la taille et le style de la police
-        g.setFont(menuFont);
-        // Obtenir les métriques de la police pour centrer le texte
-        FontMetrics metrics = g.getFontMetrics(menuFont);
-        int height = metrics.getHeight();
+          // Définir la taille et le style de la police
+          g.setFont(menuFont);
+          // Obtenir les métriques de la police pour centrer le texte
+          FontMetrics metrics = g.getFontMetrics(menuFont);
+          int height = metrics.getHeight();
 
-        // Dessiner les options du menu
-        g.setColor(new Color(133, 4, 4));
-        g.drawString("Ssss-NAKE", 450, 100);
+          // Dessiner les options du menu
+          g.setColor(new Color(133, 4, 4));
+          g.drawString("Ssss-NAKE", 450, 100);
 
-        for (int i = 0; i < options.length; i++) {
-            String option = options[i];
+          for (int i = 0; i < options.length; i++) {
+              String option = options[i];
 
-            int width = metrics.stringWidth(option);
+              int width = metrics.stringWidth(option);
 
-            if (i == currentSelection) {
-                g.setColor(new Color(19, 124, 5));
-            } else {
-                g.setColor(Color.BLACK);
-            }
+              if (i == currentSelection) {
+                  g.setColor(new Color(19, 124, 5));
+              } else {
+                  g.setColor(Color.BLACK);
+              }
 
-            // Calculer la position x pour centrer le texte
-            int x = (SCREEN_WIDTH - width) / 2;
-            int y = ((SCREEN_HEIGHT - height * options.length) / 2 + height * i) + 100;
+              // Calculer la position x pour centrer le texte
+              int x = (SCREEN_WIDTH - width) / 2;
+              int y = ((SCREEN_HEIGHT - height * options.length) / 2 + height * i) + 100;
 
-            g.drawString(option, x, y);
-
+              g.drawString(option, x, y);
+                    } else {
+              // Code pour afficher le tableau des scores
+              if (scoreboard != null && !scoreboard.getHighScores().isEmpty()) {
+                  scoreboard.afficherScores(g, getWidth(), 100);
+          } else {
+              g.setColor(Color.WHITE);
+              g.setFont(new Font("Arial", Font.BOLD, 40));
+              String noScoreText = "Aucun score disponible";
+              g.drawString(noScoreText, (getWidth() - g.getFontMetrics().stringWidth(noScoreText)) / 2, getHeight() / 2);
+          }
         }
     }
+    
 
     @Override
     public void keyTyped(KeyEvent e) {
@@ -110,14 +125,25 @@ public class StartMenu extends JPanel implements KeyListener {
         } else if (key == KeyEvent.VK_ENTER) {
             if (currentSelection == 0) {
                 gameFrame.startGame();
+
                 clip.stop();
+              
+                afficherLesScores = false;
+
             } else if (currentSelection == 1) {
+                afficherLesScores = true;
+                repaint(); // Redessine le composant pour afficher les scores
+            } else if (currentSelection == 2) {
                 System.exit(0);
                 clip.stop();
             }
+        } else if (key == KeyEvent.VK_ESCAPE) { // Ajout d'une touche pour revenir au menu
+            afficherLesScores = false;
         }
         repaint();
     }
+
+    
 
     @Override
     public void keyReleased(KeyEvent e) {
