@@ -9,8 +9,8 @@ public class GamePanel extends JPanel implements ActionListener {
     private GameFrame gameFrame; // Ajoute une référence à GameFrame
     private Scoreboard scoreboard;
 
-    public static final int SCREEN_WIDTH = 600;
-    public static final int SCREEN_HEIGHT = 600;
+    public static final int SCREEN_WIDTH = 1200;
+    public static final int SCREEN_HEIGHT = 700;
     public static final int UNIT_SIZE = 20; // Apples
     public static final int GAME_UNITS = (SCREEN_WIDTH * SCREEN_HEIGHT) / UNIT_SIZE; // Numbr of apples in the screen
     public static final int DELAY = 75; // miniteur : délai plus élevé = jeu plus lent

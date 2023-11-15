@@ -1,5 +1,9 @@
 package Snake;
 
+import java.io.IOException;
+
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JFrame;
 
 public class GameFrame extends JFrame {
@@ -7,21 +11,24 @@ public class GameFrame extends JFrame {
     private StartMenu startMenu;
     private GamePanel gamePanel;
 
-    GameFrame() {
+    GameFrame() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
         scoreboard = new Scoreboard(); // Initialisation de Scoreboard
         startMenu = new StartMenu(this, scoreboard);
         gamePanel = new GamePanel(this, scoreboard);
 
         this.setTitle("Snake");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.add(gamePanel);
         this.setResizable(false);
+        this.pack();
+
         this.setLocationRelativeTo(null);
     }
 
     public void showStartMenu() {
         this.setContentPane(startMenu);
         startMenu.requestFocusInWindow();
-        this.pack();
+
         this.setVisible(true);
     }
 
