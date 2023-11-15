@@ -31,14 +31,14 @@ public class StartMenu extends JPanel implements KeyListener {
         // read img
         try {
             background = ImageIO.read(new File(
-                    "C:\\Users\\bariz\\OneDrive\\Bureau\\Nouveau dossier (3)\\T-JAV-501-MPL_5\\Snake\\ressources\\Background.jpg"));
+                    ".\\T-JAV-501-MPL_5\\Snake\\ressources\\Background.jpg"));
         } catch (IOException e) {
             e.printStackTrace();
         }
         setLayout(new BorderLayout());
 
         // add sound
-        audioStream = AudioSystem.getAudioInputStream(new File("C:\\Users\\bariz\\OneDrive\\Bureau\\Nouveau dossier (3)\\T-JAV-501-MPL_5\\Snake\\ressources\\risk-136788.wav").getAbsoluteFile());
+        audioStream = AudioSystem.getAudioInputStream(new File(".\\T-JAV-501-MPL_5\\Snake\\ressources\\risk-136788.wav").getAbsoluteFile());
         clip = AudioSystem.getClip();
         
         clip.open(audioStream);
@@ -52,7 +52,7 @@ public class StartMenu extends JPanel implements KeyListener {
         // charger font
         try {
             Font jimFont = Font.createFont(Font.TRUETYPE_FONT, new File(
-                    "C:\\Users\\bariz\\OneDrive\\Bureau\\Nouveau dossier (3)\\T-JAV-501-MPL_5\\Snake\\ressources\\JimNightshade-Regular.ttf"));
+                    ".\\T-JAV-501-MPL_5\\Snake\\ressources\\JimNightshade-Regular.ttf"));
             jimFont = jimFont.deriveFont(80f);
             menuFont = jimFont;
 
