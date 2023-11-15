@@ -76,12 +76,12 @@ public class GamePanel extends JPanel implements ActionListener {
 
         // add sound 1
         audioStream = AudioSystem.getAudioInputStream(new File(
-                "C:\\Users\\bariz\\OneDrive\\Bureau\\Nouveau dossier (3)\\T-JAV-501-MPL_5\\Snake\\ressources\\punch.wav")
+                ".\\T-JAV-501-MPL_5\\Snake\\ressources\\punch.wav")
                 .getAbsoluteFile());
         clip = AudioSystem.getClip();
         // add sound 2
         audioStream2 = AudioSystem.getAudioInputStream(new File(
-                "C:\\Users\\bariz\\OneDrive\\Bureau\\Nouveau dossier (3)\\T-JAV-501-MPL_5\\Snake\\ressources\\eat.wav")
+                ".\\T-JAV-501-MPL_5\\Snake\\ressources\\eat.wav")
                 .getAbsoluteFile());
         clip2 = AudioSystem.getClip();
 
@@ -137,7 +137,7 @@ public class GamePanel extends JPanel implements ActionListener {
             if (!clip2.isRunning()) {
                 try {
                     audioStream2 = AudioSystem.getAudioInputStream(new File(
-                            "C:\\Users\\bariz\\OneDrive\\Bureau\\Nouveau dossier (3)\\T-JAV-501-MPL_5\\Snake\\ressources\\eat.wav")
+                            ".\\T-JAV-501-MPL_5\\Snake\\ressources\\eat.wav")
                             .getAbsoluteFile());
                     clip2 = AudioSystem.getClip();
                     clip2.open(audioStream2);
@@ -258,7 +258,7 @@ public class GamePanel extends JPanel implements ActionListener {
         // add sound
         try {
             audioStream3 = AudioSystem.getAudioInputStream(new File(
-                    "C:\\Users\\bariz\\OneDrive\\Bureau\\Nouveau dossier (3)\\T-JAV-501-MPL_5\\Snake\\ressources\\failure.wav")
+                    ".\\T-JAV-501-MPL_5\\Snake\\ressources\\failure.wav")
                     .getAbsoluteFile());
             clip3 = AudioSystem.getClip();
             clip3.open(audioStream3);

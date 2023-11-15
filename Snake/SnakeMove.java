@@ -21,7 +21,7 @@ public class SnakeMove {
                 y[0] = y[0] - UNIT_SIZE;
                 try {
                     Drawer.headSnake = ImageIO.read(new File(
-                            "C:\\Users\\bariz\\OneDrive\\Bureau\\Nouveau dossier (3)\\T-JAV-501-MPL_5\\Snake\\ressources\\HeadSnake2.png"));
+                            ".\\T-JAV-501-MPL_5\\Snake\\ressources\\HeadSnake2.png"));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

@@ -32,7 +32,7 @@ public class Drawer {
             case 'U':
                 try {
                     Drawer.headSnake = ImageIO.read(new File(
-                            "C:\\Users\\bariz\\OneDrive\\Bureau\\Nouveau dossier (3)\\T-JAV-501-MPL_5\\Snake\\ressources\\HeadSnake2.png"));
+                            ".\\T-JAV-501-MPL_5\\Snake\\ressources\\HeadSnake2.png"));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -41,7 +41,7 @@ public class Drawer {
             case 'D':
                 try {
                     headSnake = ImageIO.read(new File(
-                            "C:\\Users\\bariz\\OneDrive\\Bureau\\Nouveau dossier (3)\\T-JAV-501-MPL_5\\Snake\\ressources\\HeadSnake3.png"));
+                            ".\\T-JAV-501-MPL_5\\Snake\\ressources\\HeadSnake3.png"));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -49,7 +49,7 @@ public class Drawer {
             case 'L':
                 try {
                     headSnake = ImageIO.read(new File(
-                            "C:\\Users\\bariz\\OneDrive\\Bureau\\Nouveau dossier (3)\\T-JAV-501-MPL_5\\Snake\\ressources\\HeadSnake4.png"));
+                            ".\\T-JAV-501-MPL_5\\Snake\\ressources\\HeadSnake4.png"));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -57,7 +57,7 @@ public class Drawer {
             case 'R':
                 try {
                     headSnake = ImageIO.read(new File(
-                            "C:\\Users\\bariz\\OneDrive\\Bureau\\Nouveau dossier (3)\\T-JAV-501-MPL_5\\Snake\\ressources\\HeadSnake1.png"));
+                            ".\\T-JAV-501-MPL_5\\Snake\\ressources\\HeadSnake1.png"));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -67,7 +67,7 @@ public class Drawer {
         }
         try {
             lapin = ImageIO.read(new File(
-                    "C:\\Users\\bariz\\OneDrive\\Bureau\\Nouveau dossier (3)\\T-JAV-501-MPL_5\\Snake\\ressources\\Lapin.png"));
+                    ".\\T-JAV-501-MPL_5\\Snake\\ressources\\Lapin.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -97,7 +97,7 @@ public class Drawer {
         // draw the wall
         try {
             wall1 = ImageIO.read(new File(
-                    "C:\\Users\\bariz\\OneDrive\\Bureau\\Nouveau dossier (3)\\T-JAV-501-MPL_5\\Snake\\ressources\\wall.png"));
+                    ".\\T-JAV-501-MPL_5\\Snake\\ressources\\wall.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
