@@ -42,6 +42,8 @@ public class GameFrame extends JFrame {
 
     public void returnToMenu() {
         showStartMenu();
+ 
+        
     }
 
     public void updateHighScores(int score) {

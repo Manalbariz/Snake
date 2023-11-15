@@ -12,6 +12,7 @@ public class Scoreboard {
     private boolean isNewBestScore; // Indicateur pour un nouveau meilleur score
 
     public Scoreboard() {
+        
         highScores = new ArrayList<>();
         isNewBestScore = false; // Initialisé à faux
     }
