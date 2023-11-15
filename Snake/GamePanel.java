@@ -6,6 +6,8 @@ import javax.swing.*;
 import java.util.Random;
 
 public class GamePanel extends JPanel implements ActionListener {
+    private GameFrame gameFrame; // Ajoute une référence à GameFrame
+    private Scoreboard scoreboard;
 
     public static final int SCREEN_WIDTH = 600;
     public static final int SCREEN_HEIGHT = 600;
@@ -20,8 +22,8 @@ public class GamePanel extends JPanel implements ActionListener {
     //
 
     // The nmbr of snake part in the beginning
-    public int bodyParts = 5;
-    public int applesEaten = 0;
+    public int bodyParts;
+    public int applesEaten;
     //
 
     // position of apples
@@ -30,20 +32,21 @@ public class GamePanel extends JPanel implements ActionListener {
     //
 
     // Snake direction
-    char direction = 'R'; // beging by going right
+    char direction; // beging by going right
     //
 
-    public boolean running = false;
+    public boolean running;
     public Timer timer;
     public Random random;
 
-    GamePanel() {
+    GamePanel(GameFrame gameFrame, Scoreboard scoreboard) {
+        this.gameFrame = gameFrame; // Initialise la référence à GameFrame
+        this.scoreboard = scoreboard;
         random = new Random();
         this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT)); // modif size game panel
         this.setBackground(Color.black); // add a pic later
         this.setFocusable(true);
         this.addKeyListener(new MyKeyAdapter());
-        startGame();
     }
 
     public void startGame() {
@@ -53,9 +56,30 @@ public class GamePanel extends JPanel implements ActionListener {
         timer.start();
     }
 
+    public void initializeGame() {
+
+        // Réinitialise les variables d'état
+        bodyParts = 5;
+        applesEaten = 0;
+        direction = 'R';
+        // Réinitialise la position du serpent
+        for (int i = 0; i < bodyParts; i++) {
+            x[i] = UNIT_SIZE * 3 - i * UNIT_SIZE; // Assure-toi que cela commence dans une case
+            y[i] = UNIT_SIZE * 3; // Cette valeur doit également être un multiple de UNIT_SIZE
+        }
+        newApple();
+        running = true;
+    }
+    
+    
+
     public void paintComponent(Graphics graph) {
         super.paintComponent(graph);
-        Drawer.draw(graph, SCREEN_WIDTH, SCREEN_HEIGHT, UNIT_SIZE, appleX, appleY, x, y, bodyParts);
+        if (running) {
+            Drawer.draw(graph, SCREEN_WIDTH, SCREEN_HEIGHT, UNIT_SIZE, appleX, appleY, x, y, bodyParts);
+        } else {
+            gameOver(graph);
+        }
     }
 
     public void newApple() { // add an apple
@@ -113,7 +137,28 @@ public class GamePanel extends JPanel implements ActionListener {
     }
 
     public void gameOver(Graphics g) {
-
+        // Ajout du score au tableau
+        scoreboard.addScore(applesEaten);
+    
+        // Affichage de "Game Over" en plus gros et plus haut
+        g.setColor(Color.RED);
+        g.setFont(new Font("Arial", Font.BOLD, 100));
+        FontMetrics metrics1 = getFontMetrics(g.getFont());
+        String gameOverText = "Game Over";
+        g.drawString(gameOverText, (SCREEN_WIDTH - metrics1.stringWidth(gameOverText)) / 2, SCREEN_HEIGHT / 4);
+    
+        // Appel de la méthode afficherScores pour dessiner le tableau des scores
+        int yStart = SCREEN_HEIGHT / 2; 
+        int y = scoreboard.afficherScores(g, SCREEN_WIDTH, yStart);
+    
+        // Espace supplémentaire entre le tableau des scores et le score du joueur
+        y += g.getFontMetrics().getHeight(); // Ajustement pour plus d'espace
+    
+        // Affichage du score actuel du joueur
+        g.setColor(Color.WHITE);
+        g.setFont(new Font("Arial", Font.BOLD, 30));
+        String scoreText = "Votre Score: " + applesEaten;
+        g.drawString(scoreText, (SCREEN_WIDTH - g.getFontMetrics().stringWidth(scoreText)) / 2, y);
     }
 
     @Override
@@ -152,6 +197,9 @@ public class GamePanel extends JPanel implements ActionListener {
                     break;
                 default:
                     break;
+            }
+            if (!running && e.getKeyCode() == KeyEvent.VK_ENTER) {
+                gameFrame.returnToMenu(); // Appelle la méthode de GameFrame pour retourner au menu
             }
         }
 

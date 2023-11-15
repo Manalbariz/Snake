@@ -2,18 +2,42 @@ package Snake;
 
 import javax.swing.JFrame;
 
-public class GameFrame extends JFrame{
-    GameFrame(){
+public class GameFrame extends JFrame {
+    private Scoreboard scoreboard;
+    private StartMenu startMenu;
+    private GamePanel gamePanel;
 
-        GamePanel panel = new GamePanel();
+    GameFrame() {
+        scoreboard = new Scoreboard(); // Initialisation de Scoreboard
+        startMenu = new StartMenu(this, scoreboard);
+        gamePanel = new GamePanel(this, scoreboard);
 
-        this.add(panel);
         this.setTitle("Snake");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
+        this.setLocationRelativeTo(null);
+    }
+
+    public void showStartMenu() {
+        this.setContentPane(startMenu);
+        startMenu.requestFocusInWindow();
         this.pack();
         this.setVisible(true);
-        this.setLocationRelativeTo(null);
+    }
 
+    public void startGame() {
+        gamePanel.initializeGame(); // Réinitialise le jeu
+        this.setContentPane(gamePanel); // Utilise l'instance de GamePanel stockée
+        gamePanel.startGame();
+        gamePanel.requestFocusInWindow();
+        this.revalidate();
+    }
+
+    public void returnToMenu() {
+        showStartMenu();
+    }
+
+    public void updateHighScores(int score) {
+        scoreboard.addScore(score);
     }
 }
