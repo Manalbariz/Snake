@@ -284,8 +284,8 @@ public class GamePanel extends JPanel implements ActionListener {
                                                                                                                 // haute
 
         // Position de départ pour le tableau des scores
-        int y = SCREEN_HEIGHT / 2;
-        int yStart = scoreboard.afficherScores(g, SCREEN_WIDTH, y);
+        int yStart = SCREEN_HEIGHT / 2;
+        int y = scoreboard.afficherScores(g, SCREEN_WIDTH, yStart);
 
         // Affichage du tableau des scores
         g.setColor(Color.WHITE);
