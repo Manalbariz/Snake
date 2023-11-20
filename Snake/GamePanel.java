@@ -33,6 +33,8 @@ public class GamePanel extends JPanel implements ActionListener {
     private AudioInputStream audioStream2;
     private Clip clip3;
     private AudioInputStream audioStream3;
+    private Clip clip4;
+    private AudioInputStream audioStream4;
     private boolean clipOpen = false;
     public boolean eaten = false;
 
@@ -106,7 +108,6 @@ public class GamePanel extends JPanel implements ActionListener {
     public void startGame() {
 
         newApple(); // create a new apple on screen
- 
 
         running = true;
         timer = new Timer(DELAY, this); // we use "this" because we are using the ActionListener interface
@@ -153,14 +154,14 @@ public class GamePanel extends JPanel implements ActionListener {
     }
 
     public void newBomb() { // add a bomb
-        for(int i=19 ; i>0 ; i--){
-        if ((bombX[i] != appleX) & (bombY[i] != appleY)) {
-            bombX[i] = random.nextInt(1, (int) (SCREEN_WIDTH / UNIT_SIZE) - 1) * UNIT_SIZE;
-            bombY[i] = random.nextInt(1, (int) (SCREEN_HEIGHT / UNIT_SIZE) - 1) * UNIT_SIZE;
-        } else {
-            bombX[i] += UNIT_SIZE;
+        for (int i = 19; i > 0; i--) {
+            if ((bombX[i] != appleX) & (bombY[i] != appleY)) {
+                bombX[i] = random.nextInt(1, (int) (SCREEN_WIDTH / UNIT_SIZE) - 1) * UNIT_SIZE;
+                bombY[i] = random.nextInt(1, (int) (SCREEN_HEIGHT / UNIT_SIZE) - 1) * UNIT_SIZE;
+            } else {
+                bombX[i] += UNIT_SIZE;
+            }
         }
-    }
     }
 
     public void checkApple() {
@@ -186,7 +187,7 @@ public class GamePanel extends JPanel implements ActionListener {
             if (clip2.isRunning()) {
                 clip2.stop();
             }
-            if (bodyParts == 15) {
+            if (bodyParts == 16) {
                 newBomb();
                 gameFrame.Level2();
             }
@@ -235,17 +236,26 @@ public class GamePanel extends JPanel implements ActionListener {
         //
         //
 
-         //check collision with bombs
-        for(int i=19 ; i>0 ; i--){
-            if((x[0] == bombX[i]) && (y[0] == bombY[i])){
-                handleCollision();
+        // check collision with bombs
+        for (int i = 19; i > 0; i--) {
+            if ((x[0] == bombX[i]) && (y[0] == bombY[i])) {
+                
+
+                try {
+                    audioStream4 = AudioSystem.getAudioInputStream(new File(
+                            ".\\T-JAV-501-MPL_5\\Snake\\ressources\\explosion.wav")
+                            .getAbsoluteFile());
+                    clip4 = AudioSystem.getClip();
+                    clip4.open(audioStream4);
+                    clip4.loop(0);
+                } catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
+                    e.printStackTrace();
+                }
                 running = false;
             }
         }
-        
-        
-        //
 
+        //
 
         // stop timer
         if (!running) {
@@ -255,8 +265,6 @@ public class GamePanel extends JPanel implements ActionListener {
 
         //
 
-
-       
     }
 
     private void handleCollision() {
