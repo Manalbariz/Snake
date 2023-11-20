@@ -10,6 +10,7 @@ public class GameFrame extends JFrame {
     private Scoreboard scoreboard;
     private StartMenu startMenu;
     private GamePanel gamePanel;
+    public static boolean isLevel2 = false;
 
     GameFrame() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
         scoreboard = new Scoreboard(); // Initialisation de Scoreboard
@@ -40,6 +41,13 @@ public class GameFrame extends JFrame {
         this.revalidate();
     }
 
+    public void Level2(){
+        
+        this.setContentPane(gamePanel); 
+        gamePanel.requestFocusInWindow();
+        this.revalidate();
+        isLevel2 = true;
+    }
     public void returnToMenu() {
         showStartMenu();
  
