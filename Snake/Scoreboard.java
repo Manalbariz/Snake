@@ -34,15 +34,19 @@ public class Scoreboard {
     public int afficherScores(Graphics g, int screenWidth, int yStart) {
         g.setColor(Color.WHITE);
         g.setFont(new Font("Arial", Font.BOLD, 40));
+
+        final int ESPACEMENT_FIXE = 300; // Ajustez cette valeur selon vos besoins
+
         int y = yStart;
         for (int score : highScores) {
-            String scoreText = "Score: " + score;
             if (isNewBestScore && highScores.indexOf(score) == 0) {
+                String scoreText = "Score: " + score;
                 scoreText += " - new best score!";
                 isNewBestScore = false; // Réinitialiser après l'affichage
+                g.drawString(scoreText, (screenWidth - g.getFontMetrics().stringWidth(scoreText)) / 2, y);
             }
-            g.drawString(scoreText, (screenWidth - g.getFontMetrics().stringWidth(scoreText)) / 2, y);
-            y += g.getFontMetrics().getHeight();
+
+            y = ESPACEMENT_FIXE;
         }
         return y; // Retourne la position y finale
     }

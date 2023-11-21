@@ -259,7 +259,7 @@ public class GamePanel extends JPanel implements ActionListener {
                                                                                                                 // haute
 
         // Position de départ pour le tableau des scores
-        int yStart = SCREEN_HEIGHT / 2;
+        int yStart = SCREEN_HEIGHT / 3;
         int y = scoreboard.afficherScores(g, SCREEN_WIDTH, yStart);
 
         // Affichage du tableau des scores
