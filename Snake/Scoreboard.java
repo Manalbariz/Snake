@@ -75,7 +75,7 @@ public class Scoreboard {
 
             y = ESPACEMENT_FIXE;
         }
-        return y; // Retourne la position y finale
+        return y;
     }
     
 }

@@ -94,12 +94,12 @@ public class GamePanel extends JPanel implements ActionListener {
         clipOpen = false;
         // add sound 1
         audioStream = AudioSystem.getAudioInputStream(new File(
-                ".\\T-JAV-501-MPL_5\\Snake\\ressources\\punch.wav")
+                "C:\\Users\\antho\\Desktop\\T-JAV-501-MPL_5\\Snake\\ressources\\punch.wav")
                 .getAbsoluteFile());
         clip = AudioSystem.getClip();
         // add sound 2
         audioStream2 = AudioSystem.getAudioInputStream(new File(
-                ".\\T-JAV-501-MPL_5\\Snake\\ressources\\eat.wav")
+                "C:\\Users\\antho\\Desktop\\T-JAV-501-MPL_5\\Snake\\ressources\\eat.wav")
                 .getAbsoluteFile());
         clip2 = AudioSystem.getClip();
 
@@ -182,7 +182,7 @@ public class GamePanel extends JPanel implements ActionListener {
             if (!clip2.isRunning()) {
                 try {
                     audioStream2 = AudioSystem.getAudioInputStream(new File(
-                            ".\\T-JAV-501-MPL_5\\Snake\\ressources\\eat.wav")
+                            "C:\\Users\\antho\\Desktop\\T-JAV-501-MPL_5\\Snake\\ressources\\eat.wav")
                             .getAbsoluteFile());
                     clip2 = AudioSystem.getClip();
                     clip2.open(audioStream2);
@@ -253,7 +253,7 @@ public class GamePanel extends JPanel implements ActionListener {
 
                 try {
                     audioStream4 = AudioSystem.getAudioInputStream(new File(
-                            ".\\T-JAV-501-MPL_5\\Snake\\ressources\\explosion.wav")
+                            "C:\\Users\\antho\\Desktop\\T-JAV-501-MPL_5\\Snake\\ressources\\explosion.wav")
                             .getAbsoluteFile());
                     clip4 = AudioSystem.getClip();
                     clip4.open(audioStream4);
@@ -301,7 +301,7 @@ public class GamePanel extends JPanel implements ActionListener {
 
         try {
             audioStream3 = AudioSystem.getAudioInputStream(new File(
-                    ".\\T-JAV-501-MPL_5\\Snake\\ressources\\failure.wav")
+                    "C:\\Users\\antho\\Desktop\\T-JAV-501-MPL_5\\Snake\\ressources\\failure.wav")
                     .getAbsoluteFile());
             clip3 = AudioSystem.getClip();
             if (!clip3.isRunning()) {
