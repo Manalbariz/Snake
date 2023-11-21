@@ -164,6 +164,16 @@ public class GamePanel extends JPanel implements ActionListener {
         }
     }
 
+    public void suppBomb() { // add a bomb
+        for (int i = 19; i > 0; i--) {
+            
+                bombX[i] = -40;
+                bombY[i] = -40;
+        
+        }
+    }
+    
+
     public void checkApple() {
         if ((x[0] == appleX) && (y[0] == appleY)) {
             appleXx = appleX;
@@ -187,7 +197,7 @@ public class GamePanel extends JPanel implements ActionListener {
             if (clip2.isRunning()) {
                 clip2.stop();
             }
-            if (bodyParts == 16) {
+            if (bodyParts == 10) {
                 newBomb();
                 gameFrame.Level2();
             }
@@ -251,7 +261,9 @@ public class GamePanel extends JPanel implements ActionListener {
                 } catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
                     e.printStackTrace();
                 }
+                suppBomb();
                 running = false;
+
             }
         }
 
