@@ -45,7 +45,7 @@ public class GamePanel extends JPanel implements ActionListener {
     //
 
     // The nmbr of snake part in the beginning
-    public int bodyParts;
+    public static int bodyParts;
     public int applesEaten;
     //
 
@@ -69,7 +69,6 @@ public class GamePanel extends JPanel implements ActionListener {
     public boolean running;
     public Timer timer;
     public Random random;
-    private int i = 10;
 
     // private Image backgroundGame;
 
@@ -166,15 +165,14 @@ public class GamePanel extends JPanel implements ActionListener {
 
     public void suppBomb() { // add a bomb
         for (int i = 19; i > 0; i--) {
-            
-                bombX[i] = -40;
-                bombY[i] = -40;
-        
+
+            bombX[i] = -40;
+            bombY[i] = -40;
+
         }
     }
-    
 
-    public void checkApple() {
+    public void checkApple() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
         if ((x[0] == appleX) && (y[0] == appleY)) {
             appleXx = appleX;
             appleYy = appleY;
@@ -197,10 +195,12 @@ public class GamePanel extends JPanel implements ActionListener {
             if (clip2.isRunning()) {
                 clip2.stop();
             }
-            if (bodyParts == 10) {
+            if (bodyParts == 15) {
+                running = false;
+                gameFrame.showLevel2Challenge();
                 newBomb();
-                gameFrame.Level2();
             }
+            
             newApple();
 
         }
@@ -249,7 +249,6 @@ public class GamePanel extends JPanel implements ActionListener {
         // check collision with bombs
         for (int i = 19; i > 0; i--) {
             if ((x[0] == bombX[i]) && (y[0] == bombY[i])) {
-                
 
                 try {
                     audioStream4 = AudioSystem.getAudioInputStream(new File(
@@ -295,6 +294,17 @@ public class GamePanel extends JPanel implements ActionListener {
 
         running = false;
     }
+
+    // public void Level1Challenge(Graphics g) {
+    //     while(!running) {
+    //         g.setColor(Color.RED);
+    //         g.setFont(new Font("Arial", Font.BOLD, 100));
+    //         FontMetrics metrics1 = getFontMetrics(g.getFont());
+    //         String gameOverText = "Level 1";
+    //         g.drawString(gameOverText, (SCREEN_WIDTH - metrics1.stringWidth(gameOverText)) / 2, SCREEN_HEIGHT / 4);
+    //     }
+
+    // }
 
     public void gameOver(Graphics g) {
         // add sound
@@ -352,7 +362,18 @@ public class GamePanel extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (running) {
             SnakeMove.move(bodyParts, x, y, UNIT_SIZE, direction);
-            checkApple();
+            try {
+                checkApple();
+            } catch (UnsupportedAudioFileException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            } catch (IOException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            } catch (LineUnavailableException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
             checkCollisions();
         }
         repaint();

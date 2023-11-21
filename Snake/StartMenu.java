@@ -11,6 +11,8 @@ import javax.sound.sampled.*;
 
 public class StartMenu extends JPanel implements KeyListener {
     private GameFrame gameFrame; // Référence à GameFrame
+    private GamePanel gamePanel;    
+
     private Scoreboard scoreboard;
     private boolean afficherLesScores = false;
     private int currentSelection = 0; // 0 pour "Jouer", 1 pour "Quitter"
@@ -25,8 +27,10 @@ public class StartMenu extends JPanel implements KeyListener {
     private Clip clip;
     private AudioInputStream audioStream;
 
-    public StartMenu(GameFrame gameFrame, Scoreboard scoreboard)throws UnsupportedAudioFileException, IOException, LineUnavailableException {
+    public StartMenu(GameFrame gameFrame,GamePanel gamePanel, Scoreboard scoreboard)throws UnsupportedAudioFileException, IOException, LineUnavailableException {
         this.gameFrame = gameFrame;
+        this.gamePanel = gamePanel;
+
         this.scoreboard = scoreboard;
         // read img
         try {
@@ -126,7 +130,19 @@ public class StartMenu extends JPanel implements KeyListener {
             currentSelection = (currentSelection + 1) % options.length;
         } else if (key == KeyEvent.VK_ENTER) {
             if (currentSelection == 0) {
-                gameFrame.startGame();
+
+                gameFrame.isLevel1 = true;
+                try {
+                    gameFrame.showLevel1Challenge();
+                } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
+                
+                
+                // gamePanel.Level1Challenge(getGraphics());
+                // gameFrame.startGame();
+                
                 
                 clip.stop();
               
