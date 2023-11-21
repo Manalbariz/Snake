@@ -30,7 +30,7 @@ public class Drawer {
         // read img
         try {
             sang = ImageIO.read(new File(
-                    ".\\T-JAV-501-MPL_5\\Snake\\ressources\\sang.png"));
+                    "C:\\Users\\antho\\Desktop\\T-JAV-501-MPL_5\\Snake\\ressources\\sang.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -38,7 +38,7 @@ public class Drawer {
             case 'U':
                 try {
                     Drawer.headSnake = ImageIO.read(new File(
-                            ".\\T-JAV-501-MPL_5\\Snake\\ressources\\HeadSnake2.png"));
+                            "C:\\Users\\antho\\Desktop\\T-JAV-501-MPL_5\\Snake\\ressources\\HeadSnake2.png"));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -47,7 +47,7 @@ public class Drawer {
             case 'D':
                 try {
                     headSnake = ImageIO.read(new File(
-                            ".\\T-JAV-501-MPL_5\\Snake\\ressources\\HeadSnake3.png"));
+                            "C:\\Users\\antho\\Desktop\\T-JAV-501-MPL_5\\Snake\\ressources\\HeadSnake3.png"));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -55,7 +55,7 @@ public class Drawer {
             case 'L':
                 try {
                     headSnake = ImageIO.read(new File(
-                            ".\\T-JAV-501-MPL_5\\Snake\\ressources\\HeadSnake4.png"));
+                            "C:\\Users\\antho\\Desktop\\T-JAV-501-MPL_5\\Snake\\ressources\\HeadSnake4.png"));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -63,7 +63,7 @@ public class Drawer {
             case 'R':
                 try {
                     headSnake = ImageIO.read(new File(
-                            ".\\T-JAV-501-MPL_5\\Snake\\ressources\\HeadSnake1.png"));
+                            "C:\\Users\\antho\\Desktop\\T-JAV-501-MPL_5\\Snake\\ressources\\HeadSnake1.png"));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -73,7 +73,7 @@ public class Drawer {
         }
         try {
             lapin = ImageIO.read(new File(
-                    ".\\T-JAV-501-MPL_5\\Snake\\ressources\\Lapin.png"));
+                    "C:\\Users\\antho\\Desktop\\T-JAV-501-MPL_5\\Snake\\ressources\\Lapin.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -110,7 +110,7 @@ public class Drawer {
         // draw the wall
         try {
             wall1 = ImageIO.read(new File(
-                    ".\\T-JAV-501-MPL_5\\Snake\\ressources\\wall.png"));
+                    "C:\\Users\\antho\\Desktop\\T-JAV-501-MPL_5\\Snake\\ressources\\wall.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -139,7 +139,7 @@ public class Drawer {
         if(GameFrame.isLevel2){
             try {
             bomb = ImageIO.read(new File(
-                    ".\\T-JAV-501-MPL_5\\Snake\\ressources\\Bomb.png"));
+                    "C:\\Users\\antho\\Desktop\\T-JAV-501-MPL_5\\Snake\\ressources\\Bomb.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
