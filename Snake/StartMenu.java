@@ -127,7 +127,7 @@ public class StartMenu extends JPanel implements KeyListener {
         } else if (key == KeyEvent.VK_ENTER) {
             if (currentSelection == 0) {
                 gameFrame.startGame();
-
+                
                 clip.stop();
               
                 afficherLesScores = false;

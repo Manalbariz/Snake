@@ -14,20 +14,26 @@ public class Drawer {
     private static Image lapin;
     public static Image headSnake;
     public static Image wall1;
-
-
-
+    public static Image sang;
+    public static Image bomb;
 
     public static void draw(Graphics graph, int SCREEN_WIDTH, int SCREEN_HEIGHT, int UNIT_SIZE, int appleX, int appleY,
-            int[] x, int[] y, int bodyParts) {
+            int[] x, int[] y, int bodyParts, boolean eaten, int appleXx, int appleYy, int[] bombX, int[] bombY) {
         // // turn into grid
         // for (int i = 0; i < SCREEN_HEIGHT * 2 / UNIT_SIZE; i++) {
-        //     graph.drawLine(i * UNIT_SIZE, 0, i * UNIT_SIZE, SCREEN_HEIGHT);
-        //     graph.drawLine(0, i * UNIT_SIZE, SCREEN_WIDTH, i * UNIT_SIZE);
+        // graph.drawLine(i * UNIT_SIZE, 0, i * UNIT_SIZE, SCREEN_HEIGHT);
+        // graph.drawLine(0, i * UNIT_SIZE, SCREEN_WIDTH, i * UNIT_SIZE);
         // }
         // //
 
         // read img
+        // read img
+        try {
+            sang = ImageIO.read(new File(
+                    ".\\T-JAV-501-MPL_5\\Snake\\ressources\\sang.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         switch (GamePanel.direction) {
             case 'U':
                 try {
@@ -72,13 +78,20 @@ public class Drawer {
             e.printStackTrace();
         }
 
-        // draw the apple
+        // draw the rabitt
         // graph.setColor(Color.BLUE);
         // graph.fillOval(appleX, appleY, UNIT_SIZE, UNIT_SIZE);
         Image scaledlapin = lapin.getScaledInstance(UNIT_SIZE, UNIT_SIZE, Image.SCALE_DEFAULT);
         graph.drawImage(scaledlapin, appleX, appleY, null);
+         // draw the blood
+
+        if (eaten) {
+            Image scaledSang = sang.getScaledInstance(UNIT_SIZE*2, UNIT_SIZE*2, Image.SCALE_DEFAULT);
+            graph.drawImage(scaledSang, appleXx, appleYy, null);
+        }
 
         //
+
 
         // draw the snake
         for (int i = 0; i < bodyParts; i++) {
@@ -102,25 +115,39 @@ public class Drawer {
             e.printStackTrace();
         }
         Image scaledwall1 = wall1.getScaledInstance(UNIT_SIZE, UNIT_SIZE, Image.SCALE_DEFAULT);
-        
 
-        for (int j=0 ; j < SCREEN_WIDTH*UNIT_SIZE ; j++) {
+        for (int j = 0; j < SCREEN_WIDTH * UNIT_SIZE; j++) {
             // graph.setColor(new Color(83, 179, 203));
-            
+
             // graph.drawImage(scaledwall1, i, 0, null);
             graph.drawImage(scaledwall1, j, 0, UNIT_SIZE, UNIT_SIZE, null);
             graph.drawImage(scaledwall1, j, (SCREEN_HEIGHT - UNIT_SIZE), UNIT_SIZE, UNIT_SIZE, null);
             graph.drawImage(scaledwall1, 0, j, UNIT_SIZE, UNIT_SIZE, null);
             graph.drawImage(scaledwall1, (SCREEN_WIDTH - UNIT_SIZE), j, UNIT_SIZE, UNIT_SIZE, null);
 
-            
-            
             // graph.fillRect(j, 0, UNIT_SIZE, UNIT_SIZE);
             // graph.fillRect(j, (SCREEN_HEIGHT - UNIT_SIZE), UNIT_SIZE, UNIT_SIZE);
             // graph.fillRect(0, i, UNIT_SIZE, UNIT_SIZE);
             // graph.fillRect((SCREEN_WIDTH - UNIT_SIZE), i, UNIT_SIZE, UNIT_SIZE);
 
-            j += 19 ;
+            j += 19;
+
+        }
+
+        //draw bombs
+
+        if(GameFrame.isLevel2){
+            try {
+            bomb = ImageIO.read(new File(
+                    ".\\T-JAV-501-MPL_5\\Snake\\ressources\\Bomb.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        for(int i=19 ; i>0 ; i--){
+            graph.drawImage(bomb, bombX[i], bombY[i], UNIT_SIZE, UNIT_SIZE, null);
+
+        }
+
 
         }
     }

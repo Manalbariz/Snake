@@ -25,6 +25,7 @@ public class GamePanel extends JPanel implements ActionListener {
     public static final int UNIT_SIZE = 30; // Apples
     public static final int GAME_UNITS = (SCREEN_WIDTH * SCREEN_HEIGHT) / UNIT_SIZE; // Numbr of apples in the screen
     public static final int DELAY = 75; // miniteur : délai plus élevé = jeu plus lent
+    public static int currentDelay = DELAY;
 
     private Clip clip;
     private AudioInputStream audioStream;
@@ -32,7 +33,11 @@ public class GamePanel extends JPanel implements ActionListener {
     private AudioInputStream audioStream2;
     private Clip clip3;
     private AudioInputStream audioStream3;
+    private Clip clip4;
+    private AudioInputStream audioStream4;
     private boolean clipOpen = false;
+    public boolean eaten = false;
+
     // the body of the snake
     public final int x[] = new int[GAME_UNITS]; // the size is GAME_UNITS because the snake can't be bigger than the
                                                 // nmbr of units
@@ -47,6 +52,14 @@ public class GamePanel extends JPanel implements ActionListener {
     // position of apples
     public int appleX;
     public int appleY;
+    public int appleXx;
+    public int appleYy;
+    //
+
+    // position of Bombs
+    public int bombX[] = new int[20];
+    public int bombY[] = new int[20];
+
     //
 
     // Snake direction
@@ -56,6 +69,7 @@ public class GamePanel extends JPanel implements ActionListener {
     public boolean running;
     public Timer timer;
     public Random random;
+    private int i = 10;
 
     // private Image backgroundGame;
 
@@ -94,6 +108,7 @@ public class GamePanel extends JPanel implements ActionListener {
     public void startGame() {
 
         newApple(); // create a new apple on screen
+
         running = true;
         timer = new Timer(DELAY, this); // we use "this" because we are using the ActionListener interface
         timer.start();
@@ -122,7 +137,8 @@ public class GamePanel extends JPanel implements ActionListener {
         // SCREEN_HEIGHT, Image.SCALE_DEFAULT);
         // graph.drawImage(scaledBackgroundGame, 0, 0, null);
         if (running) {
-            Drawer.draw(graph, SCREEN_WIDTH, SCREEN_HEIGHT, UNIT_SIZE, appleX, appleY, x, y, bodyParts);
+            Drawer.draw(graph, SCREEN_WIDTH, SCREEN_HEIGHT, UNIT_SIZE, appleX, appleY, x, y, bodyParts, eaten, appleXx,
+                    appleYy, bombX, bombY);
         } else {
             gameOver(graph);
         }
@@ -133,29 +149,57 @@ public class GamePanel extends JPanel implements ActionListener {
         // generate a random apple in one of the case (on grid)
         appleX = random.nextInt(1, (int) (SCREEN_WIDTH / UNIT_SIZE) - 1) * UNIT_SIZE;
         appleY = random.nextInt(1, (int) (SCREEN_HEIGHT / UNIT_SIZE) - 1) * UNIT_SIZE;
+
         //
     }
 
+    public void newBomb() { // add a bomb
+        for (int i = 19; i > 0; i--) {
+            if ((bombX[i] != appleX) & (bombY[i] != appleY)) {
+                bombX[i] = random.nextInt(1, (int) (SCREEN_WIDTH / UNIT_SIZE) - 1) * UNIT_SIZE;
+                bombY[i] = random.nextInt(1, (int) (SCREEN_HEIGHT / UNIT_SIZE) - 1) * UNIT_SIZE;
+            } else {
+                bombX[i] += UNIT_SIZE;
+            }
+        }
+    }
+
+    public void suppBomb() { // add a bomb
+        for (int i = 19; i > 0; i--) {
+            
+                bombX[i] = -40;
+                bombY[i] = -40;
+        
+        }
+    }
+    
+
     public void checkApple() {
         if ((x[0] == appleX) && (y[0] == appleY)) {
+            appleXx = appleX;
+            appleYy = appleY;
+            eaten = true;
             if (!clip2.isRunning()) {
-            try {
-            audioStream2 = AudioSystem.getAudioInputStream(new File(
-            ".\\T-JAV-501-MPL_5\\Snake\\ressources\\eat.wav")
-            .getAbsoluteFile());
-            clip2 = AudioSystem.getClip();
-            clip2.open(audioStream2);
-            clip2.loop(0);
-            } catch (LineUnavailableException | IOException |
-            UnsupportedAudioFileException e) {
-            e.printStackTrace();
-            }
+                try {
+                    audioStream2 = AudioSystem.getAudioInputStream(new File(
+                            ".\\T-JAV-501-MPL_5\\Snake\\ressources\\eat.wav")
+                            .getAbsoluteFile());
+                    clip2 = AudioSystem.getClip();
+                    clip2.open(audioStream2);
+                    clip2.loop(0);
+                } catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
+                    e.printStackTrace();
+                }
             }
 
             bodyParts++;
             applesEaten++;
             if (clip2.isRunning()) {
-            clip2.stop();
+                clip2.stop();
+            }
+            if (bodyParts == 10) {
+                newBomb();
+                gameFrame.Level2();
             }
             newApple();
 
@@ -202,6 +246,29 @@ public class GamePanel extends JPanel implements ActionListener {
         //
         //
 
+        // check collision with bombs
+        for (int i = 19; i > 0; i--) {
+            if ((x[0] == bombX[i]) && (y[0] == bombY[i])) {
+                
+
+                try {
+                    audioStream4 = AudioSystem.getAudioInputStream(new File(
+                            ".\\T-JAV-501-MPL_5\\Snake\\ressources\\explosion.wav")
+                            .getAbsoluteFile());
+                    clip4 = AudioSystem.getClip();
+                    clip4.open(audioStream4);
+                    clip4.loop(0);
+                } catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
+                    e.printStackTrace();
+                }
+                suppBomb();
+                running = false;
+
+            }
+        }
+
+        //
+
         // stop timer
         if (!running) {
             timer.stop();
@@ -211,12 +278,13 @@ public class GamePanel extends JPanel implements ActionListener {
         //
 
     }
+
     private void handleCollision() {
         if (clipOpen) {
             clip.stop();
             clip.close();
         }
-    
+
         try {
             clip.open(audioStream);
             clip.loop(0);
@@ -224,7 +292,7 @@ public class GamePanel extends JPanel implements ActionListener {
         } catch (LineUnavailableException | IOException e) {
             e.printStackTrace();
         }
-    
+
         running = false;
     }
 
@@ -232,17 +300,16 @@ public class GamePanel extends JPanel implements ActionListener {
         // add sound
 
         try {
-        audioStream3 = AudioSystem.getAudioInputStream(new File(
-        ".\\T-JAV-501-MPL_5\\Snake\\ressources\\failure.wav")
-        .getAbsoluteFile());
-        clip3 = AudioSystem.getClip();
-        if (!clip3.isRunning()) {
-        clip3.open(audioStream3);
-        clip3.loop(0);
-        }
-        } catch (LineUnavailableException | IOException |
-        UnsupportedAudioFileException e) {
-        e.printStackTrace();
+            audioStream3 = AudioSystem.getAudioInputStream(new File(
+                    ".\\T-JAV-501-MPL_5\\Snake\\ressources\\failure.wav")
+                    .getAbsoluteFile());
+            clip3 = AudioSystem.getClip();
+            if (!clip3.isRunning()) {
+                clip3.open(audioStream3);
+                clip3.loop(0);
+            }
+        } catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
+            e.printStackTrace();
         }
 
         // Ajout du score au tableau
