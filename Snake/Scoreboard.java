@@ -2,7 +2,10 @@ package Snake;
 
 import java.util.ArrayList;
 import java.util.Collections;
-
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -10,11 +13,12 @@ import java.awt.Graphics;
 public class Scoreboard {
     private ArrayList<Integer> highScores;
     private boolean isNewBestScore; // Indicateur pour un nouveau meilleur score
+    private static final String SCORES_FILE = "highscores.csv";
 
     public Scoreboard() {
-        
         highScores = new ArrayList<>();
         isNewBestScore = false; // Initialisé à faux
+        loadScoresFromFile();
     }
 
     public void addScore(int score) {
@@ -25,6 +29,29 @@ public class Scoreboard {
             highScores.remove(5); // Conserve uniquement les 5 meilleurs scores
         }
         isNewBestScore = wasFirst && score == highScores.get(0); // Vérifie si c'est un nouveau meilleur score
+        saveScoresToFile();
+    }
+
+    private void saveScoresToFile() {
+        try (FileWriter writer = new FileWriter(SCORES_FILE)) {
+            for (int score : highScores) {
+                writer.write(score + "\n");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void loadScoresFromFile() {
+        try (BufferedReader reader = new BufferedReader(new FileReader(SCORES_FILE))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                highScores.add(Integer.parseInt(line));
+            }
+            Collections.sort(highScores, Collections.reverseOrder());
+        } catch (IOException e) {
+            // Fichier non trouvé ou autre erreur de lecture
+        }
     }
 
     public ArrayList<Integer> getHighScores() {
