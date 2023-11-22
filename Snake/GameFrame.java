@@ -23,7 +23,6 @@ public class GameFrame extends JFrame {
 
     private Clip clip5;
 
-
     GameFrame() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
         scoreboard = new Scoreboard(); // Initialisation de Scoreboard
         gamePanel = new GamePanel(this, scoreboard);
@@ -32,7 +31,7 @@ public class GameFrame extends JFrame {
         level2 = new Level2(this);
 
 
-        this.setTitle("Snake");
+         this.setTitle("Snake");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.add(gamePanel);
         this.setResizable(false);
@@ -47,7 +46,7 @@ public class GameFrame extends JFrame {
 
         this.setVisible(true);
     }
-    public void showLevel1Challenge() throws UnsupportedAudioFileException, IOException, LineUnavailableException{
+    public void showLevel1Challenge() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
         this.setContentPane(level1);
         level1.requestFocusInWindow();
 
@@ -63,7 +62,8 @@ public class GameFrame extends JFrame {
             clip5.loop(0);
         }
     }
-    public void showLevel2Challenge() throws UnsupportedAudioFileException, IOException, LineUnavailableException{
+
+    public void showLevel2Challenge() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
         this.setContentPane(level2);
         level2.requestFocusInWindow();
 
@@ -73,10 +73,10 @@ public class GameFrame extends JFrame {
                 new File(".\\T-JAV-501-MPL_5\\Snake\\ressources\\level2.wav").getAbsoluteFile());
         clip5 = AudioSystem.getClip();
 
-            clip5.open(audioStream5);
+        clip5.open(audioStream5);
 
-            clip5.loop(0);
-            
+        clip5.loop(0);
+
     }
 
     public void startGame() {
@@ -86,14 +86,14 @@ public class GameFrame extends JFrame {
         gamePanel.requestFocusInWindow();
         this.revalidate();
     }
-   
+
     public void Level2() {
         gamePanel.initializeGame();
         this.setContentPane(gamePanel);
         gamePanel.requestFocusInWindow();
         this.revalidate();
         isLevel2 = true;
-    
+
     }
 
     public void returnToMenu() {
