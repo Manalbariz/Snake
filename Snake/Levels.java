@@ -58,17 +58,20 @@ public class Levels extends JPanel implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
-        
-            if (key == KeyEvent.VK_ENTER) {
-                if(gamePanel.bodyParts != 15){
-                    gameFrame.startGame();
-                }else if(gamePanel.bodyParts == 15){
-                    gameFrame.startGame();
-                    gameFrame.Level2();
-                }
+
+        if (key == KeyEvent.VK_ENTER) {
+            if (gamePanel.bodyParts == 7) {
+                gameFrame.startGame();
+                gameFrame.Level2();
+
+            } else if (gamePanel.bodyParts == 8) {
+                gameFrame.startGame();
+                gameFrame.Level3();
+            } else {
+                gameFrame.startGame();
+            }
         }
-        
-        
+
     }
 
     @Override

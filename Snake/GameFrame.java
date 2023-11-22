@@ -15,9 +15,12 @@ public class GameFrame extends JFrame {
     private StartMenu startMenu;
     private Level1 level1;
     private Level2 level2;
+    private Level3 level3;
     private GamePanel gamePanel;
-    public static boolean isLevel2 = false;
+
     public static boolean isLevel1 = false;
+    public static boolean isLevel2 = false;
+    public static boolean isLevel3 = false;
 
     private AudioInputStream audioStream5;
 
@@ -29,9 +32,9 @@ public class GameFrame extends JFrame {
         startMenu = new StartMenu(this, gamePanel, scoreboard);
         level1 = new Level1(this);
         level2 = new Level2(this);
+        level3 = new Level3(this);
 
-
-         this.setTitle("Snake");
+        this.setTitle("Snake");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.add(gamePanel);
         this.setResizable(false);
@@ -46,6 +49,7 @@ public class GameFrame extends JFrame {
 
         this.setVisible(true);
     }
+
     public void showLevel1Challenge() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
         this.setContentPane(level1);
         level1.requestFocusInWindow();
@@ -55,12 +59,13 @@ public class GameFrame extends JFrame {
         audioStream5 = AudioSystem.getAudioInputStream(
                 new File(".\\T-JAV-501-MPL_5\\Snake\\ressources\\level1.wav").getAbsoluteFile());
         clip5 = AudioSystem.getClip();
-
+        isLevel1 = true;
         if (isLevel1) {
             clip5.open(audioStream5);
 
             clip5.loop(0);
         }
+
     }
 
     public void showLevel2Challenge() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
@@ -72,14 +77,37 @@ public class GameFrame extends JFrame {
         audioStream5 = AudioSystem.getAudioInputStream(
                 new File(".\\T-JAV-501-MPL_5\\Snake\\ressources\\level2.wav").getAbsoluteFile());
         clip5 = AudioSystem.getClip();
+        isLevel1 = false;
+        isLevel2 = true;
+        if (isLevel2) {
+            clip5.open(audioStream5);
 
-        clip5.open(audioStream5);
+            clip5.loop(0);
+        }
 
-        clip5.loop(0);
+    }
+
+    public void showLevel3Challenge() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
+        this.setContentPane(level3);
+        level3.requestFocusInWindow();
+
+        this.setVisible(true);
+        // add sound
+        audioStream5 = AudioSystem.getAudioInputStream(
+                new File(".\\T-JAV-501-MPL_5\\Snake\\ressources\\level2.wav").getAbsoluteFile());
+        clip5 = AudioSystem.getClip();
+        isLevel2 = false;
+        isLevel3 = true;
+        if (isLevel3) {
+            clip5.open(audioStream5);
+
+            clip5.loop(0);
+        }
 
     }
 
     public void startGame() {
+        
         gamePanel.initializeGame(); // Réinitialise le jeu
         this.setContentPane(gamePanel); // Utilise l'instance de GamePanel stockée
         gamePanel.startGame();
@@ -92,7 +120,15 @@ public class GameFrame extends JFrame {
         this.setContentPane(gamePanel);
         gamePanel.requestFocusInWindow();
         this.revalidate();
-        isLevel2 = true;
+        // isLevel2 = true;
+
+    }
+
+    public void Level3() {
+        gamePanel.initializeGame();
+        this.setContentPane(gamePanel);
+        gamePanel.requestFocusInWindow();
+        this.revalidate();
 
     }
 

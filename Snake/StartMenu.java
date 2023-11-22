@@ -131,7 +131,7 @@ public class StartMenu extends JPanel implements KeyListener {
         } else if (key == KeyEvent.VK_ENTER) {
             if (currentSelection == 0) {
 
-                gameFrame.isLevel1 = true;
+                // gameFrame.isLevel1 = true;
                 try {
                     gameFrame.showLevel1Challenge();
                 } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e1) {
