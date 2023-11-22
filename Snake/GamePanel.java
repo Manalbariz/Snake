@@ -195,11 +195,14 @@ public class GamePanel extends JPanel implements ActionListener {
             if (clip2.isRunning()) {
                 clip2.stop();
             }
-            if (bodyParts == 15) {
+            
+                if (bodyParts == 15) {
                 running = false;
                 gameFrame.showLevel2Challenge();
                 newBomb();
             }
+            
+            
             
             newApple();
 
