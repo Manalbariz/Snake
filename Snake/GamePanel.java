@@ -38,14 +38,19 @@ public class GamePanel extends JPanel implements ActionListener {
     private boolean clipOpen = false;
     public boolean eaten = false;
 
-    // the body of the snake
+    // the body of the snake1
     public final int x[] = new int[GAME_UNITS]; // the size is GAME_UNITS because the snake can't be bigger than the
                                                 // nmbr of units
     public final int y[] = new int[GAME_UNITS];
     //
+    // the body of the snake2
+    public final int x2[] = new int[GAME_UNITS];
+    public final int y2[] = new int[GAME_UNITS];
+    //
 
     // The nmbr of snake part in the beginning
-    public int bodyParts;
+    public static int bodyParts;
+    public static int bodyParts2;
     public int applesEaten;
     //
 
@@ -64,12 +69,12 @@ public class GamePanel extends JPanel implements ActionListener {
 
     // Snake direction
     static char direction; // beging by going right
+    static char direction2;
     //
 
     public boolean running;
     public Timer timer;
     public Random random;
-    private int i = 10;
 
     // private Image backgroundGame;
 
@@ -120,10 +125,17 @@ public class GamePanel extends JPanel implements ActionListener {
         bodyParts = 5;
         applesEaten = 0;
         direction = 'R';
-        // Réinitialise la position du serpent
+        bodyParts2 = 5;
+        direction2 = 'R';
+        // Réinitialise la position du serpent 1
         for (int i = 0; i < bodyParts; i++) {
             x[i] = UNIT_SIZE * 3 - i * UNIT_SIZE; // Assure-toi que cela commence dans une case
             y[i] = UNIT_SIZE * 3; // Cette valeur doit également être un multiple de UNIT_SIZE
+        }
+        // Réinitialise la position du serpent 2
+        for (int i = 0; i < bodyParts2; i++) {
+            x2[i] = UNIT_SIZE * 3 - i * UNIT_SIZE;
+            y2[i] = UNIT_SIZE * 3;
         }
         newApple();
         running = true;
@@ -137,8 +149,15 @@ public class GamePanel extends JPanel implements ActionListener {
         // SCREEN_HEIGHT, Image.SCALE_DEFAULT);
         // graph.drawImage(scaledBackgroundGame, 0, 0, null);
         if (running) {
-            Drawer.draw(graph, SCREEN_WIDTH, SCREEN_HEIGHT, UNIT_SIZE, appleX, appleY, x, y, bodyParts, eaten, appleXx,
-                    appleYy, bombX, bombY);
+            if (gameFrame.isLevel3) {
+                Drawer.draw2(graph, SCREEN_WIDTH, SCREEN_HEIGHT, UNIT_SIZE, appleX, appleY, x, y, x2, y2, bodyParts,
+                        bodyParts2, eaten, appleXx, appleYy, bombX, bombY);
+            } else {
+                Drawer.draw(graph, SCREEN_WIDTH, SCREEN_HEIGHT, UNIT_SIZE, appleX, appleY, x, y, bodyParts, eaten,
+                        appleXx,
+                        appleYy, bombX, bombY);
+            }
+
         } else {
             gameOver(graph);
         }
@@ -160,21 +179,21 @@ public class GamePanel extends JPanel implements ActionListener {
                 bombY[i] = random.nextInt(1, (int) (SCREEN_HEIGHT / UNIT_SIZE) - 1) * UNIT_SIZE;
             } else {
                 bombX[i] += UNIT_SIZE;
+                bombY[i] += UNIT_SIZE;
             }
         }
     }
 
     public void suppBomb() { // add a bomb
         for (int i = 19; i > 0; i--) {
-            
-                bombX[i] = -40;
-                bombY[i] = -40;
-        
+
+            bombX[i] = -40;
+            bombY[i] = -40;
+
         }
     }
-    
 
-    public void checkApple() {
+    public void checkApple() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
         if ((x[0] == appleX) && (y[0] == appleY)) {
             appleXx = appleX;
             appleYy = appleY;
@@ -197,16 +216,54 @@ public class GamePanel extends JPanel implements ActionListener {
             if (clip2.isRunning()) {
                 clip2.stop();
             }
-            if (bodyParts == 10) {
-                newBomb();
-                gameFrame.Level2();
+            if (gameFrame.isLevel1) {
+                if (bodyParts == 7) {
+                    running = false;
+                    gameFrame.showLevel2Challenge();
+                    newBomb();
+                }
+
             }
+            if (gameFrame.isLevel2) {
+                if (bodyParts == 8) {
+
+                    running = false;
+                    gameFrame.showLevel3Challenge();
+                    suppBomb();
+
+                }
+
+            }
+
             newApple();
 
         }
+        if ((x2[0] == appleX) && (y2[0] == appleY)) {
+            appleXx = appleX;
+            appleYy = appleY;
+            eaten = true;
+            if (!clip2.isRunning()) {
+                try {
+                    audioStream2 = AudioSystem.getAudioInputStream(new File(
+                            ".\\T-JAV-501-MPL_5\\Snake\\ressources\\eat.wav")
+                            .getAbsoluteFile());
+                    clip2 = AudioSystem.getClip();
+                    clip2.open(audioStream2);
+                    clip2.loop(0);
+                } catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
+                    e.printStackTrace();
+                }
+            }
+            bodyParts2++;
+            applesEaten++;
+            newApple();
+
+        }
+
     }
 
     public void checkCollisions() {
+        // snake1
         // check if head collides with body
         for (int i = bodyParts; i > 0; i--) {
             if ((x[0] == x[i]) && (y[0] == y[i])) {
@@ -249,7 +306,6 @@ public class GamePanel extends JPanel implements ActionListener {
         // check collision with bombs
         for (int i = 19; i > 0; i--) {
             if ((x[0] == bombX[i]) && (y[0] == bombY[i])) {
-                
 
                 try {
                     audioStream4 = AudioSystem.getAudioInputStream(new File(
@@ -266,6 +322,47 @@ public class GamePanel extends JPanel implements ActionListener {
 
             }
         }
+
+        //
+        // snake2
+        // check if head collides with body
+        for (int i = bodyParts2; i > 0; i--) {
+            if ((x2[0] == x2[i]) && (y2[0] == y2[i])) {
+                handleCollision();
+                running = false;
+
+            }
+        }
+        //
+        // check if head collides with borders
+        // check if head collides with left border
+        if (x2[0] <= 0) {
+            handleCollision();
+            running = false;
+
+        }
+        //
+        // check if head collides with right border
+        if (x2[0] > SCREEN_WIDTH - UNIT_SIZE) { // add UNIT_SIZE*2 to keep the head of the snake on screen (SCREEN_WIDTH
+            handleCollision();
+            running = false;
+
+        }
+        //
+        // check if head collides with up border
+        if (y2[0] < 0) {
+            handleCollision();
+            running = false;
+        }
+        //
+        // check if head collides with down border
+        if (y2[0] > SCREEN_HEIGHT - UNIT_SIZE) { // (SCREEN_HEIGHT - UNIT_SIZE * 3)
+            handleCollision();
+            running = false;
+
+        }
+        //
+        //
 
         //
 
@@ -292,9 +389,22 @@ public class GamePanel extends JPanel implements ActionListener {
         } catch (LineUnavailableException | IOException e) {
             e.printStackTrace();
         }
+        gameFrame.isLevel3 = false;
 
         running = false;
     }
+
+    // public void Level1Challenge(Graphics g) {
+    // while(!running) {
+    // g.setColor(Color.RED);
+    // g.setFont(new Font("Arial", Font.BOLD, 100));
+    // FontMetrics metrics1 = getFontMetrics(g.getFont());
+    // String gameOverText = "Level 1";
+    // g.drawString(gameOverText, (SCREEN_WIDTH -
+    // metrics1.stringWidth(gameOverText)) / 2, SCREEN_HEIGHT / 4);
+    // }
+
+    // }
 
     public void gameOver(Graphics g) {
         // add sound
@@ -352,7 +462,21 @@ public class GamePanel extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (running) {
             SnakeMove.move(bodyParts, x, y, UNIT_SIZE, direction);
-            checkApple();
+            if (gameFrame.isLevel3) {
+                SnakeMove.move(bodyParts2, x2, y2, UNIT_SIZE, direction2);
+            }
+            try {
+                checkApple();
+            } catch (UnsupportedAudioFileException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            } catch (IOException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            } catch (LineUnavailableException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
             checkCollisions();
         }
         repaint();
@@ -380,6 +504,26 @@ public class GamePanel extends JPanel implements ActionListener {
                 case KeyEvent.VK_DOWN:
                     if (direction != 'U') {
                         direction = 'D';
+                    }
+                    break;
+                case KeyEvent.VK_Q:
+                    if (direction2 != 'R') { // because the snake can turn only 90deg
+                        direction2 = 'L';
+                    }
+                    break;
+                case KeyEvent.VK_D:
+                    if (direction2 != 'L') {
+                        direction2 = 'R';
+                    }
+                    break;
+                case KeyEvent.VK_Z:
+                    if (direction2 != 'D') {
+                        direction2 = 'U';
+                    }
+                    break;
+                case KeyEvent.VK_S:
+                    if (direction2 != 'U') {
+                        direction2 = 'D';
                     }
                     break;
                 default:

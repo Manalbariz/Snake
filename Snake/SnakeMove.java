@@ -7,7 +7,7 @@ import javax.imageio.ImageIO;
 
 public class SnakeMove {
     public static void move(int bodyParts, int[] x, int[] y, int UNIT_SIZE, char direction) {
-        // moving each bodypart of the snake
+        // moving each bodypart of the snake 
         for (int i = bodyParts; i > 0; i--) {
             x[i] = x[i - 1];
             y[i] = y[i - 1];
@@ -41,4 +41,5 @@ public class SnakeMove {
         }
 
     }
+  
 }
