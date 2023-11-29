@@ -35,14 +35,14 @@ public class StartMenu extends JPanel implements KeyListener {
         // read img
         try {
             background = ImageIO.read(new File(
-                    "C:\\Users\\antho\\Desktop\\T-JAV-501-MPL_5\\Snake\\ressources\\Background.jpg"));
+                    "C:\\Users\\antho\\Desktop\\T-JAV-501-MPL_5\\T-JAV-501-MPL_5\\Snake\\ressources\\Background.jpg"));
         } catch (IOException e) {
             e.printStackTrace();
         }
         setLayout(new BorderLayout());
 
         // add sound
-        audioStream = AudioSystem.getAudioInputStream(new File("C:\\Users\\antho\\Desktop\\T-JAV-501-MPL_5\\Snake\\ressources\\risk-136788.wav").getAbsoluteFile());
+        audioStream = AudioSystem.getAudioInputStream(new File("C:\\Users\\antho\\Desktop\\T-JAV-501-MPL_5\\T-JAV-501-MPL_5\\Snake\\ressources\\risk-136788.wav").getAbsoluteFile());
         clip = AudioSystem.getClip();
         
         
@@ -57,7 +57,7 @@ public class StartMenu extends JPanel implements KeyListener {
         // charger font
         try {
             Font jimFont = Font.createFont(Font.TRUETYPE_FONT, new File(
-                    "C:\\Users\\antho\\Desktop\\T-JAV-501-MPL_5\\Snake\\ressources\\JimNightshade-Regular.ttf"));
+                    "C:\\Users\\antho\\Desktop\\T-JAV-501-MPL_5\\T-JAV-501-MPL_5\\Snake\\ressources\\JimNightshade-Regular.ttf"));
             jimFont = jimFont.deriveFont(80f);
             menuFont = jimFont;
 
@@ -108,7 +108,7 @@ public class StartMenu extends JPanel implements KeyListener {
                 if (scoreboard != null && !scoreboard.getHighScores().isEmpty()) {
                     scoreboard.afficherScores(g, getWidth(), 100);
             } else {
-                g.setColor(Color.WHITE);
+                g.setColor(Color.BLACK);
                 g.setFont(new Font("Arial", Font.BOLD, 40));
                 String noScoreText = "Aucun score disponible";
                 g.drawString(noScoreText, (getWidth() - g.getFontMetrics().stringWidth(noScoreText)) / 2, getHeight() / 2);

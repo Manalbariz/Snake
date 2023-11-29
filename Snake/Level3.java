@@ -15,7 +15,7 @@ public class Level3 extends Levels {
         // read img
         try {
             level = ImageIO.read(new File(
-                    ".\\T-JAV-501-MPL_5\\Snake\\ressources\\level3.jpg"));
+                    "C:\\Users\\antho\\Desktop\\T-JAV-501-MPL_5\\T-JAV-501-MPL_5\\Snake\\ressources\\level3.jpg"));
         } catch (IOException e) {
             e.printStackTrace();
         }

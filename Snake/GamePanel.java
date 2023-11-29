@@ -27,6 +27,8 @@ public class GamePanel extends JPanel implements ActionListener {
     public static final int DELAY = 75; // miniteur : délai plus élevé = jeu plus lent
     public static int currentDelay = DELAY;
 
+    // public static boolean Nscore;
+
     private Clip clip;
     private AudioInputStream audioStream;
     private Clip clip2;
@@ -99,12 +101,12 @@ public class GamePanel extends JPanel implements ActionListener {
         clipOpen = false;
         // add sound 1
         audioStream = AudioSystem.getAudioInputStream(new File(
-                "C:\\Users\\antho\\Desktop\\T-JAV-501-MPL_5\\Snake\\ressources\\punch.wav")
+                "C:\\Users\\antho\\Desktop\\T-JAV-501-MPL_5\\T-JAV-501-MPL_5\\Snake\\ressources\\punch.wav")
                 .getAbsoluteFile());
         clip = AudioSystem.getClip();
         // add sound 2
         audioStream2 = AudioSystem.getAudioInputStream(new File(
-                "C:\\Users\\antho\\Desktop\\T-JAV-501-MPL_5\\Snake\\ressources\\eat.wav")
+                "C:\\Users\\antho\\Desktop\\T-JAV-501-MPL_5\\T-JAV-501-MPL_5\\Snake\\ressources\\eat.wav")
                 .getAbsoluteFile());
         clip2 = AudioSystem.getClip();
 
@@ -123,7 +125,9 @@ public class GamePanel extends JPanel implements ActionListener {
 
         // Réinitialise les variables d'état
         bodyParts = 5;
-        applesEaten = 0;
+        if (gameFrame.Nscore == true) {
+            applesEaten = 0;
+        }
         direction = 'R';
         bodyParts2 = 5;
         direction2 = 'R';
@@ -201,7 +205,7 @@ public class GamePanel extends JPanel implements ActionListener {
             if (!clip2.isRunning()) {
                 try {
                     audioStream2 = AudioSystem.getAudioInputStream(new File(
-                            "C:\\Users\\antho\\Desktop\\T-JAV-501-MPL_5\\Snake\\ressources\\eat.wav")
+                            "C:\\Users\\antho\\Desktop\\T-JAV-501-MPL_5\\T-JAV-501-MPL_5\\Snake\\ressources\\eat.wav")
                             .getAbsoluteFile());
                     clip2 = AudioSystem.getClip();
                     clip2.open(audioStream2);
@@ -245,7 +249,7 @@ public class GamePanel extends JPanel implements ActionListener {
             if (!clip2.isRunning()) {
                 try {
                     audioStream2 = AudioSystem.getAudioInputStream(new File(
-                            ".\\T-JAV-501-MPL_5\\Snake\\ressources\\eat.wav")
+                            "C:\\Users\\antho\\Desktop\\T-JAV-501-MPL_5\\T-JAV-501-MPL_5\\Snake\\ressources\\eat.wav")
                             .getAbsoluteFile());
                     clip2 = AudioSystem.getClip();
                     clip2.open(audioStream2);
@@ -277,6 +281,7 @@ public class GamePanel extends JPanel implements ActionListener {
         // check if head collides with left border
         if (x[0] <= 0) {
             handleCollision();
+            suppBomb();
             running = false;
 
         }
@@ -284,6 +289,7 @@ public class GamePanel extends JPanel implements ActionListener {
         // check if head collides with right border
         if (x[0] > SCREEN_WIDTH - UNIT_SIZE) { // add UNIT_SIZE*2 to keep the head of the snake on screen (SCREEN_WIDTH
             handleCollision();
+            suppBomb();
             running = false;
 
         }
@@ -291,12 +297,14 @@ public class GamePanel extends JPanel implements ActionListener {
         // check if head collides with up border
         if (y[0] < 0) {
             handleCollision();
+            suppBomb();
             running = false;
         }
         //
         // check if head collides with down border
         if (y[0] > SCREEN_HEIGHT - UNIT_SIZE) { // (SCREEN_HEIGHT - UNIT_SIZE * 3)
             handleCollision();
+            suppBomb();
             running = false;
 
         }
@@ -309,7 +317,7 @@ public class GamePanel extends JPanel implements ActionListener {
 
                 try {
                     audioStream4 = AudioSystem.getAudioInputStream(new File(
-                            "C:\\Users\\antho\\Desktop\\T-JAV-501-MPL_5\\Snake\\ressources\\explosion.wav")
+                            "C:\\Users\\antho\\Desktop\\T-JAV-501-MPL_5\\T-JAV-501-MPL_5\\Snake\\ressources\\explosion.wav")
                             .getAbsoluteFile());
                     clip4 = AudioSystem.getClip();
                     clip4.open(audioStream4);
@@ -407,11 +415,11 @@ public class GamePanel extends JPanel implements ActionListener {
     // }
 
     public void gameOver(Graphics g) {
-        // add sound
-
+        gameFrame.Nscore = true;
+        
         try {
             audioStream3 = AudioSystem.getAudioInputStream(new File(
-                    "C:\\Users\\antho\\Desktop\\T-JAV-501-MPL_5\\Snake\\ressources\\failure.wav")
+                "C:\\Users\\antho\\Desktop\\T-JAV-501-MPL_5\\T-JAV-501-MPL_5\\Snake\\ressources\\failure.wav")
                     .getAbsoluteFile());
             clip3 = AudioSystem.getClip();
             if (!clip3.isRunning()) {
@@ -421,24 +429,24 @@ public class GamePanel extends JPanel implements ActionListener {
         } catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
             e.printStackTrace();
         }
-
+        
         // Ajout du score au tableau
         scoreboard.addScore(applesEaten);
-
+        
         // Affichage de "Game Over" en plus gros et plus haut
         g.setColor(Color.RED);
         g.setFont(new Font("Arial", Font.BOLD, 100));
         FontMetrics metrics1 = getFontMetrics(g.getFont());
         String gameOverText = "Game Over";
-
+        
         g.drawString(gameOverText, (SCREEN_WIDTH - metrics1.stringWidth(gameOverText)) / 2, SCREEN_HEIGHT / 4); // Position
-                                                                                                                // plus
-                                                                                                                // haute
-
+        // plus
+        // haute
+        
         // Position de départ pour le tableau des scores
         int yStart = SCREEN_HEIGHT / 3;
         int y = scoreboard.afficherScores(g, SCREEN_WIDTH, yStart);
-
+        
         // Affichage du tableau des scores
         g.setColor(Color.WHITE);
         g.setFont(new Font("Arial", Font.BOLD, 40));
@@ -446,10 +454,10 @@ public class GamePanel extends JPanel implements ActionListener {
             g.drawString("Score: " + score, (SCREEN_WIDTH - g.getFontMetrics().stringWidth("Score: " + score)) / 2, y);
             y += g.getFontMetrics().getHeight();
         }
-
+        
         // Espace entre le tableau des scores et le score du joueur
         y += g.getFontMetrics().getHeight(); // Double saut de ligne
-
+        
         // Affichage du score actuel du joueur
         g.setColor(Color.WHITE);
         g.setFont(new Font("Arial", Font.BOLD, 30));
