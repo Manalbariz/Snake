@@ -5,7 +5,7 @@
 
 Ce projet est une implémentation du jeu Snake en Java, créée par Manal Bariz et Scrimali Anthony dans le cadre d'un projet Epitech.
 
-![Snake Game] (https://i.blogs.es/c067e7/snakepass1/1366_2000.webp)
+![Snake Game](https://i.blogs.es/c067e7/snakepass1/1366_2000.webp)
 
 ## Fonctionnalités
 
